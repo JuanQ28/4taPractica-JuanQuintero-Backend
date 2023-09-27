@@ -1,5 +1,5 @@
 import {existsSync, promises} from "fs"
-const path = 'src/products.json'
+const path = 'src/data/products.json'
 
 
 class ProductManager{
@@ -29,7 +29,7 @@ class ProductManager{
             }else{
                 id = products[products.length-1].id + 1 
             }
-            const newProduct = {id, ...product}
+            const newProduct = {id, status:true, ...product}
             products.push(newProduct)
             await promises.writeFile(this.path, JSON.stringify(products))
             return newProduct
@@ -95,4 +95,4 @@ class ProductManager{
 }
 
 //Exportamos la constante de la cual utilizaremos los método de peticiones en nuestro servidor
-export const manager = new ProductManager(path)
+export const productManager = new ProductManager(path)
