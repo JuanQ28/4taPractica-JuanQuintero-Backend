@@ -1,0 +1,60 @@
+<h1>Real Time Products</h1>
+<hr>
+<h2>Add Product</h2>
+<form action="/api/products/addProduct" method="post" autocomplete="off" id="formAdd">
+    <div>
+        <label for="title">Nombre: </label>
+        <input type="text" name="title" id="title" required class="addTitle">
+    </div>
+    <div>
+        <label for="description">Descripción: </label>
+        <input type="text" name="description" id="description" required class="addDescription">
+    </div>
+    <div>
+        <label for="code">Código: </label>
+        <input type="number" name="code" id="description" required class="addCode">
+    </div>
+    <div>
+        <label for="price">Precio: </label>
+        <input type="number" name="price" step="0.01" id="price" required class="addPrice">
+    </div>
+    <div>
+        <label for="stock">Stock: </label>
+        <input type="number" name="stock" id="stock" required class="addStock">
+    </div>
+    <div>
+        <label for="category">Categoría: </label>
+        <input type="text" name="category" id="category" required class="addCategory">
+    </div> 
+    <div>
+        <label for="thumbnail">Imagen: </label>
+        <input type="text" name="thumbnail" id="thumbnail" class="addThumbnail">
+    </div> 
+    <input type="submit" value="Enter">
+</form>
+<hr>
+<h2>Delete Product</h2>
+<form action="/api/products/deleteProduct" method="post" autocomplete="off" id="formDelete">
+    <div>
+        <label for="code">Code del producto:</label>
+        <input type="number" name="code" id="code" required class="deleteCode">
+    </div>
+    <input type="submit" value="Enter">
+</form>
+<hr>
+<div id="listContainer">
+    {{#each products}}
+    <div class="card" style="width: 18rem;" id={{code}}>
+        <img src={{thumbnail}} class="card-img-top" alt={{title}}>
+        <div class="card-body">
+            <h5 class="card-title">{{title}}</h5>
+            <p class="card-text">{{description}}</p>
+            <p class="card-text">${{price}}</p>
+            <p class="card-text">stock: {{stock}}</p>
+            <p class="card-text">Code: {{code}}</p>
+        </div>
+    </div>
+    {{/each}}
+</div>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/index.js"></script>

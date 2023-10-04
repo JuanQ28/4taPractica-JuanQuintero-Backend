@@ -1,0 +1,14 @@
+<div id="listContainer"> 
+    {{#each products}}
+    <div class="card" style="width: 18rem;" id={{code}}>
+        <img src={{thumbnail}} class="card-img-top" alt={{title}}>
+        <div class="card-body">
+            <h5 class="card-title">{{title}}</h5>
+            <p class="card-text">{{description}}</p>
+            <p class="card-text">${{price}}</p>
+            <p class="card-text">stock: {{stock}}</p>
+            <p class="card-text">Code: {{code}}</p>
+        </div>
+    </div>
+    {{/each}}
+</div>

@@ -1,57 +1,79 @@
 [
   {
     "id": 1,
-    "title": "Producto 1",
+    "title": "Producto1",
     "description": "Descripción del producto 1",
     "code": 1001,
     "price": 19.99,
     "status": true,
     "stock": 50,
     "category": "Primer categoría",
-    "thumbnail": "/ruta/imagen1.jpg"
+    "thumbnail": "./assets/imageNotFound.png"
   },
   {
     "id": 2,
-    "title": "Producto 2",
+    "title": "Producto2",
     "description": "Descripción del producto 2",
     "code": 1005,
     "price": 70.99,
     "status": true,
     "stock": 13,
     "category": "Primer categoría",
-    "thumbnail": "/ruta/imagen2.jpg"
+    "thumbnail": "./assets/imageNotFound.png"
   },
   {
     "id": 3,
-    "title": "Producto 3",
+    "title": "Producto3",
     "description": "Descripción del producto 3",
     "code": 601,
     "price": 41.59,
     "status": true,
     "stock": 45,
     "category": "Tercer categoría",
-    "thumbnail": "/ruta/imagen3.jpg"
+    "thumbnail": "./assets/imageNotFound.png"
   },
   {
     "id": 4,
-    "title": "Producto 4",
+    "title": "Producto4",
     "description": "Descripción del producto 4",
     "code": 1034,
     "price": 10.99,
     "status": true,
     "stock": 4,
     "category": "Segunda categoría",
-    "thumbnail": "/ruta/imagen4.jpg"
+    "thumbnail": "./assets/imageNotFound.png"
   },
   {
     "id": 5,
-    "title": "Producto 5",
+    "title": "Producto5",
     "description": "Descripción del producto 5",
-    "code": 1017,
-    "price": 5.99,
+    "code": 1055,
+    "price": 10.99,
     "status": true,
-    "stock": 32,
+    "stock": 2000,
     "category": "Segunda categoría",
-    "thumbnail": "/ruta/imagen5.jpg"
+    "thumbnail": "./assets/imageNotFound.png"
+  },
+  {
+    "id": 6,
+    "status": true,
+    "title": "Producto6",
+    "description": "Descripción del producto 6",
+    "code": "2323",
+    "price": "13.99",
+    "stock": "555",
+    "category": "Octava categoría",
+    "thumbnail": "./assets/imageNotFound.png"
+  },
+  {
+    "id": 7,
+    "status": true,
+    "title": "Producto7",
+    "description": "Descip del prod 7",
+    "code": "121212",
+    "price": "1000",
+    "stock": "716",
+    "category": "Octava categoría ",
+    "thumbnail": "./assets/imageNotFound.png"
   }
 ]

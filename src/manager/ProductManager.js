@@ -1,12 +1,11 @@
 import {existsSync, promises} from "fs"
 const path = 'src/data/products.json'
 
-
 class ProductManager{
     constructor(path){
         this.path = path
     }
-    async getProducts(queryObject){
+    async getProducts(queryObject = {}){
         const {limit} = queryObject
         try {
             if(existsSync(this.path)){
@@ -22,13 +21,16 @@ class ProductManager{
     }
     async addProduct(product){
         try {
-            const products = await this.getProducts({})
+            const products = await this.getProducts()
             let id
             if(!products.length){
                 id = 1
             }else{
                 id = products[products.length-1].id + 1 
             }
+            !product.thumbnail 
+                ?product.thumbnail = "./assets/imageNotFound.png"
+                :product.thumbnail;
             const newProduct = {id, status:true, ...product}
             products.push(newProduct)
             await promises.writeFile(this.path, JSON.stringify(products))
@@ -41,7 +43,7 @@ class ProductManager{
         try {
             //En este área limpiamos lo que recibamos por params, esto para recibir un array con los números separados para que podemos hacer búsqueda de varios elementos también, estos separados por comas
             const idArray = id.replace(" ", "").split(",").map((numero) => +numero)
-            const products = await this.getProducts({})
+            const products = await this.getProducts()
             let product
             let productNotFound = []
             let indexFound = []
@@ -67,7 +69,7 @@ class ProductManager{
     }
     async updateProduct(id, update){
         try {
-            const products = await this.getProducts({})
+            const products = await this.getProducts()
             const index = products.findIndex(product => product.id == id)
             if (index === -1){
                 return null
@@ -81,10 +83,23 @@ class ProductManager{
     }
     async deleteProduct(id){
         try {
-            const products = await this.getProducts({})
+            const products = await this.getProducts()
             const productFound = products.find(product => product.id === id)
             if(productFound){
                 const newProducts = products.filter(product => product.id !== id)
+                await promises.writeFile(this.path, JSON.stringify(newProducts))
+            }
+            return productFound
+        } catch (error) {
+            return error
+        }
+    }
+    async deleteProductWithCode(code){
+        try {
+            const products = await this.getProducts()
+            const productFound = products.find(product => product.code == code)
+            if(productFound){
+                const newProducts = products.filter(product => product.code != code)
                 await promises.writeFile(this.path, JSON.stringify(newProducts))
             }
             return productFound
