@@ -1,5 +1,5 @@
 import { Router } from "express";
-import {productManager} from "../manager/ProductManager.js";
+import {productManager} from "../dao/manager-fs/ProductManager.js";
 
 
 const router = Router()
@@ -34,7 +34,7 @@ router.get("/:pid", async (request, response) =>{
     }
 })
 
-//Ruta para agregar un producto, suministrando la infoamción desde el body
+//Ruta para agregar un producto, suministrando la información desde el body
 router.post("/", async (request, response) =>{
     try {
         const {title, description, code, price, stock, category} = request.body
