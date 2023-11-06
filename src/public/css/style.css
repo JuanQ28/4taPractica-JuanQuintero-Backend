@@ -7,3 +7,31 @@
     width: 100%;
     margin: 20px 0;
 }
+
+#cartContainer{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    margin: 20px;
+}
+
+#cartContainer .card{
+    width: 100%;
+    max-height: 400px;
+}
+
+.col-md-9{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.col-md-9 .card-body{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}

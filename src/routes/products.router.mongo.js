@@ -5,8 +5,8 @@ const router = Router()
 
 router.get("/", async (request, response) => {
     try {
-        const products = await productsManager.getProducts()
-        response.status(200).json({message: "Products", products})
+        const result = await productsManager.getProducts(request.query)
+        response.status(200).json({message: "Products", result})
     } catch (error) {
         response.status(500).json({message: error.message})
     }

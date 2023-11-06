@@ -1,0 +1,19 @@
+<div id="cartContainer"> 
+    {{#each cartProducts.products}}
+        <div class="card">
+            <div class="row g-0">
+                <div class="col-md-3">
+                    <img src={{product.thumbnail}} class="img-fluid rounded-start" alt={{product.title}}>
+                </div>
+                <div class="col-md-9">
+                    <div class="card-body">
+                        <h5 class="card-title">{{product.title}}</h5>
+                        <p class="card-text">{{product.price}}</p>
+                        <p class="card-text">{{product.description}}</p>
+                        <p class="card-text"><small class="text-body-secondary">Quantity: {{quantity}}</small></p>
+                    </div>
+                </div>
+            </div>
+        </div>  
+    {{/each}}
+</div>

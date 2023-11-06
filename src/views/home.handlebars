@@ -1,14 +1,15 @@
 <div id="listContainer"> 
-    {{#each products}}
-    <div class="card" style="width: 18rem;" id={{code}}>
-        <img src={{thumbnail}} class="card-img-top" alt={{title}}>
-        <div class="card-body">
-            <h5 class="card-title">{{title}}</h5>
-            <p class="card-text">{{description}}</p>
-            <p class="card-text">${{price}}</p>
-            <p class="card-text">stock: {{stock}}</p>
-            <p class="card-text">Code: {{code}}</p>
+    {{#each result.payload}}
+        <div class="card" style="width: 18rem;" id={{_id}}>
+            <img src={{thumbnail}} class="card-img-top" alt={{title}}>
+            <div class="card-body">
+                <h5 class="card-title">{{title}}</h5>
+                <p class="card-text">{{description}}</p>
+                <p class="card-text">${{price}}</p>
+                <p class="card-text">stock: {{stock}}</p>
+                <button type="button" class="btn btn-outline-success">Agregar al carrito</button>
+            </div>
         </div>
-    </div>
     {{/each}}
 </div>
+<script src="/js/home.js"></script>

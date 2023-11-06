@@ -1,16 +1,23 @@
 import { Router } from "express";
-import {productManager} from "../dao/manager-fs/ProductManager.js";
+import { productsManager } from "../dao/manager-mongo/ProductManager.mongo.js";
+import { cartsManager } from "../dao/manager-mongo/CartsManager.mongo.js";
 
 const router = Router()
 
-router.get("/products", async (request, response) => {
-    const products = await productManager.getProducts()
-    response.render("home", {products})
+router.get("/", async (request, response) => {
+    const result = await productsManager.getProducts(request.query)
+    response.render("home", {result})
 })
 
 router.get("/products/realtimeproducts", async (request, response) => {
-    const products = await productManager.getProducts()
+    const products = await productsManager.getProducts()
     response.render("realTimeProducts", {products})
+})
+
+router.get("/cart/:cid", async (request, response) => {
+    const {cid} = request.params
+    const cartProducts = await cartsManager.getCardById(cid)
+    response.render("cart", {cartProducts})
 })
 
 router.get("/chat", async (request, response) => {
