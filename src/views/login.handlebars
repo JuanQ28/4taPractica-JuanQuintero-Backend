@@ -7,20 +7,14 @@
             </button>
             <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
                 <div class="offcanvas-header">
-                    <h5 class="offcanvas-title" id="offcanvasNavbarLabel">ArmyBody</h5>
+                    <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Offcanvas</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
                 <div class="offcanvas-body">
                     <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-                        {{#if user}}
-                            <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="/api/mongo/users/signout">Cerrar</a>
-                            </li>
-                        {{else}}
-                            <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="/login">Ingresa</a>
-                            </li>
-                        {{/if}}
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="/login">Ingresa</a>
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link active" aria-current="page" href="/">Products</a>
                         </li>
@@ -61,25 +55,21 @@
 </header>
 <main>
     <div class="container">
-        {{#if user}}
-            <h1>Bienvenido {{user.name}}</h1>
-        {{else}}
-            <h1>Bienvenido</h1>
-        {{/if}}
-        <div id="listContainer"> 
-            {{#each result.payload}}
-                <div class="card" style="width: 18rem;" id={{_id}}>
-                    <img src={{thumbnail}} class="card-img-top" alt={{title}}>
-                    <div class="card-body">
-                        <h5 class="card-title">{{title}}</h5>
-                        <p class="card-text">{{description}}</p>
-                        <p class="card-text">${{price}}</p>
-                        <p class="card-text">stock: {{stock}}</p>
-                        <button type="button" class="btn btn-outline-success">Agregar al carrito</button>
-                    </div>
-                </div>
-            {{/each}}
-        </div>
+        <form class="row g-3" action="/api/mongo/users/login" method="post">
+            <div class="col-md-12">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" name="email" pattern="^(\w+[/./-]?){1,}@[a-z]+[/.]\w{2,}$" id="email" required>
+            </div>
+            <div class="col-md-12">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" name="password" id="password" required>
+            </div>
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary">Ingresar</button>
+            </div>
+            <div class="text-center">
+                <p>¿No recuerdas? <a href="/signup">Registrate</a></p>
+            </div>
+        </form>
     </div>
 </main>
-<script src="/js/home.js"></script>

@@ -6,7 +6,8 @@ const router = Router()
 
 router.get("/", async (request, response) => {
     const result = await productsManager.getProducts(request.query)
-    response.render("home", {result})
+    const user = request.session.user
+    response.render("home", {result, user})
 })
 
 router.get("/products/realtimeproducts", async (request, response) => {
@@ -22,6 +23,20 @@ router.get("/cart/:cid", async (request, response) => {
 
 router.get("/chat", async (request, response) => {
     response.render("chat")
+})
+
+router.get("/login", async (request, response) => {
+    if(request.session.user){
+        response.redirect("/")
+    }
+    response.render("login")
+})
+
+router.get("/signup", async (request, response) => {
+    if(request.session.user){
+        response.redirect("/")
+    }
+    response.render("signup")
 })
 
 export default router
