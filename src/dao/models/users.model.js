@@ -17,6 +17,10 @@ const usersSchema = new mongoose.Schema({
     password:{
         type: String,
         required: true
+    },
+    isGithub:{
+        type: Boolean,
+        default: false
     }
 })
 

@@ -10,6 +10,8 @@ import cartsRouterMongo from "./routes/carts.router.mongo.js"
 import { messagesManager } from "./dao/manager-mongo/MessagesManager.mongo.js";
 import usersRouter from "./routes/users.router.js";
 import MongoStore from "connect-mongo";
+import "./passport.js"
+import passport from "passport";
 
 //Agregamos nuestro archivo de configuraciones para el acceso a nuestra base de datos MongoDB
 import "./dao/config.js"
@@ -28,8 +30,9 @@ app.use(session({store: new MongoStore({mongoUrl: URI}),secret: "secretPassword"
 //Ahora le decimos le asignamos el puerto 8080 a nuestro servidor
 const httpServer = app.listen(8080, () => console.log("Server running in port:8080"))
 
-//Asignamos como publica, nuestra carpeta public
-
+//passport
+app.use(passport.initialize())
+app.use(passport.session())
 
 //Handlebars
 app.engine("handlebars", engine())

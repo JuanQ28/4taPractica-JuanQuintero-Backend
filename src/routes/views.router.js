@@ -6,8 +6,11 @@ const router = Router()
 
 router.get("/", async (request, response) => {
     const result = await productsManager.getProducts(request.query)
-    const user = request.session.user
-    response.render("home", {result, user})
+    if(!request.session.passport){
+        return response.redirect("/login")
+    }
+    const {name, email} = await request.user
+    response.render("home", {result, user: {name, email}})
 })
 
 router.get("/products/realtimeproducts", async (request, response) => {
@@ -37,6 +40,13 @@ router.get("/signup", async (request, response) => {
         response.redirect("/")
     }
     response.render("signup")
+})
+
+router.get("/restore", async (request, response) => {
+    if(request.session.user){
+        response.redirect("/")
+    }
+    response.render("restore")
 })
 
 export default router
