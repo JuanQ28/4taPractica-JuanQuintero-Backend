@@ -66,7 +66,8 @@ passport.use("github", new GithubStrategy(
     {
         clientID: "Iv1.1884fc5f29e407c5",
         clientSecret: "98f2d7a65af9a997b42cb06332ff57bf7670faac",
-        callbackURL: "http://localhost:8080/api/mongo/users/callback"
+        callbackURL: "http://localhost:8080/api/mongo/users/callback",
+        scope: ['user:email']
     },
     async (accessToken, refreshToken, profile, done) => {
         try {
@@ -78,7 +79,6 @@ passport.use("github", new GithubStrategy(
                     return done(null, false)
                 }
             }
-            console.log(profile)
             const infoUser = {
                 name: profile._json.name.split(" ")[0],
                 lastName: profile._json.name.split(" ")[1],
