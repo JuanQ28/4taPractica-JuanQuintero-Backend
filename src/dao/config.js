@@ -8,5 +8,5 @@ const URI = `mongodb+srv://elquinteje:${process.env.URI_PASSWORD}@cluster0.fy8hs
 
 mongoose
     .connect(URI)
-    .then(() => console.log("Conectado a la base de datos"))
+    .then(() => console.log("DB Connected"))
     .catch((error) => console.log(error))

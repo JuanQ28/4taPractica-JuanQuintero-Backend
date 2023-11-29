@@ -18,9 +18,15 @@ const usersSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    isGithub:{
-        type: Boolean,
-        default: false
+    auth:{
+        type: String,
+        enum: ["GOOGLE", "GITHUB", "NONE"],
+        default: "NONE"
+    },
+    role:{
+        type: String,
+        enum: ["CLIENT", "ADMIN"],
+        default: "CLIENT"
     }
 })
 

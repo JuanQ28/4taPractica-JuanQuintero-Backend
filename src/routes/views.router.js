@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { productsManager } from "../dao/manager-mongo/ProductManager.mongo.js";
 import { cartsManager } from "../dao/manager-mongo/CartsManager.mongo.js";
+import jwt from "jsonwebtoken";
 
 const router = Router()
 
@@ -12,6 +13,18 @@ router.get("/", async (request, response) => {
     const {name, email} = await request.user
     response.render("home", {result, user: {name, email}})
 })
+
+/* router.get("/", async (request, response) => {
+    const result = await productsManager.getProducts(request.query)
+    console.log("token" ,request.cookies.token)
+    if(!request.cookies.token){
+        return response.redirect("/login")
+    }
+    const userToken = jwt.verify(request.cookies.token, "Proyecto47315")
+    console.log("UserToken", userToken)
+    const {name, email} = userToken
+    response.render("home", {result, user: {name, email}})
+}) */
 
 router.get("/products/realtimeproducts", async (request, response) => {
     const products = await productsManager.getProducts()
@@ -29,21 +42,21 @@ router.get("/chat", async (request, response) => {
 })
 
 router.get("/login", async (request, response) => {
-    if(request.session.user){
+    if(request.cookies.token){
         response.redirect("/")
     }
     response.render("login")
 })
 
 router.get("/signup", async (request, response) => {
-    if(request.session.user){
+    if(request.cookies.token){
         response.redirect("/")
     }
     response.render("signup")
 })
 
 router.get("/restore", async (request, response) => {
-    if(request.session.user){
+    if(request.cookies.token){
         response.redirect("/")
     }
     response.render("restore")
