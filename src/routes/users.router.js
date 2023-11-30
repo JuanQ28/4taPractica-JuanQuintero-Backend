@@ -2,6 +2,7 @@ import { Router } from "express";
 import { usersManager } from "../dao/manager-mongo/UsersManager.mongo.js";
 import { compareData, generateToken, hashData } from "../utils.js";
 import passport from "passport";
+import jwt from "jsonwebtoken";
 
 const router = Router()
 
@@ -23,7 +24,22 @@ router.post("/login", async (request, response) => {
         }
         const {name, lastName, email, role} = user
         const token = generateToken({name, lastName, email, role})
-        response.cookie("token", token, {httpOnly: true}).redirect("/")
+        response.cookie("token", token).redirect("/")
+    } catch (error) {
+        response.status(500).json({message: error.message})
+    }
+})
+
+//Obtención de token a través de cookies
+router.get("/cookies", passport.authenticate("jwt", {session: false}), async (request, response) => {
+    try {
+        const currentUser = jwt.verify(request.cookies.token, "Proyecto47315")
+        console.log(currentUser)
+        if(currentUser){
+            return response.status(200).json({message: "Current user available", user: currentUser})
+        }else{
+            return response.status(404).json({message: "Current user not available"})
+        }
     } catch (error) {
         response.status(500).json({message: error.message})
     }

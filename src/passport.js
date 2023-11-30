@@ -72,14 +72,20 @@ const fromCookies = (request) => {
 passport.use("jwt", new JWTStrategy(
     {
         jwtFromRequest: ExtractJwt.fromExtractors([fromCookies]),
-        secretOrKey: "Proyecto47315"
+        secretOrKey: "Proyecto47315",
+        //passReqToCallback: true
     },
     async (jwt_payload, done) => {
-        try {
+        /* try {
+            if(jwt_payload){
+                request.currentUser = jwt_payload
+            }
+            console.log(jwt_payload)
             done(null, jwt_payload)
         } catch (error) {
             done(error)
-        }
+        } */
+        done(null, jwt_payload)
     }
 ))
 
@@ -91,7 +97,6 @@ passport.use("github", new GithubStrategy(
         scope: ['user:email']
     },
     async (accessToken, refreshToken, profile, done) => {
-        console.log(profile)
         try {
             const user = await usersManager.findByEmail(profile._json.email)
             if(user){

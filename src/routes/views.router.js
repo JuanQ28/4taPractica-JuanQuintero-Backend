@@ -5,14 +5,31 @@ import jwt from "jsonwebtoken";
 
 const router = Router()
 
+//Mala práctica: sessions y jwt en paralelo
 router.get("/", async (request, response) => {
+    const result = await productsManager.getProducts(request.query)
+    console.log("token" , request.cookies.token)
+    console.log("session", request.session.passport)
+    if(!request.cookies.token && !request.session.passport){
+        return response.redirect("/login")
+    }else if(request.cookies.token){
+        const userToken = jwt.verify(request.cookies.token, "Proyecto47315")
+        const {name, email} = userToken
+        return response.render("home", {result, user: {name, email}})
+    }else if(request.session.passport){
+        const {name, email} = await request.user
+        return response.render("home", {result, user: {name, email}})
+    }
+})
+
+/* router.get("/", async (request, response) => {
     const result = await productsManager.getProducts(request.query)
     if(!request.session.passport){
         return response.redirect("/login")
     }
     const {name, email} = await request.user
     response.render("home", {result, user: {name, email}})
-})
+}) */
 
 /* router.get("/", async (request, response) => {
     const result = await productsManager.getProducts(request.query)

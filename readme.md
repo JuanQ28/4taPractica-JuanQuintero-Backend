@@ -1,6 +1,6 @@
-# Refactor de Login
+# Práctica de integración sobre tu ecommerce
 
-Para esta entrega se generó la posibilidad de realizar un login y signup por medio de github, gracias al generador de estrategias de autenticación y autorización Passport.
+Para esta entrega se comenzó con la implementación de JWT como método de autenticación. Aún se trabaja con sessions, para las verificaciones con terceros.
 
 ## Ejecución del proyecto
 
@@ -9,6 +9,12 @@ Para iniciar el proyecto es necesario ejecutar este comando para levantar el ser
 ```bash
 npm start
 ```
+
+## Rutas para visualizar el front 
+
+Desde esta ruta se podrá ver el usuario actual, obteniendo el token JWT por medio de cookies.
+
+[Current User](http://localhost:8080/api/mongo/users/cookies). (http://localhost:8080/api/mongo/users/cookies)
 
 ## Rutas para visualizar el front 
 
