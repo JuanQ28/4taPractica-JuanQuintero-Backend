@@ -1,12 +1,12 @@
 import { Router } from "express";
 import { productsManager } from "../dao/manager-mongo/ProductManager.mongo.js";
 import { cartsManager } from "../dao/manager-mongo/CartsManager.mongo.js";
-import jwt from "jsonwebtoken";
+//import jwt from "jsonwebtoken";
 
 const router = Router()
 
 //Mala práctica: sessions y jwt en paralelo
-router.get("/", async (request, response) => {
+/* router.get("/", async (request, response) => {
     const result = await productsManager.getProducts(request.query)
     console.log("token" , request.cookies.token)
     console.log("session", request.session.passport)
@@ -20,16 +20,26 @@ router.get("/", async (request, response) => {
         const {name, email} = await request.user
         return response.render("home", {result, user: {name, email}})
     }
-})
+}) */
 
-/* router.get("/", async (request, response) => {
+router.get("/", async (request, response) => {
     const result = await productsManager.getProducts(request.query)
     if(!request.session.passport){
         return response.redirect("/login")
     }
-    const {name, email} = await request.user
-    response.render("home", {result, user: {name, email}})
-}) */
+    const currentUser = await request.user
+    const {firstName, email} = currentUser
+    request.session.user = currentUser
+    console.log("principal:", request.session)
+    response.cookie("currentUser", currentUser, {maxAge: 12000}).render("home", {result, user: {firstName, email}})
+})
+
+router.get("/current", async (request, response) => {
+    const current = request.session.user
+    //console.log("Usuario current:" , current)
+    console.log(request)
+    return response.status(200).json({message: "Current user available", user: current})
+})
 
 /* router.get("/", async (request, response) => {
     const result = await productsManager.getProducts(request.query)

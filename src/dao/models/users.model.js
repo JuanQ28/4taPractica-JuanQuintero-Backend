@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const usersSchema = new mongoose.Schema({
-    name:{
+    firstName:{
         type: String,
         required: true
     },
@@ -27,6 +27,10 @@ const usersSchema = new mongoose.Schema({
         type: String,
         enum: ["CLIENT", "ADMIN"],
         default: "CLIENT"
+    },
+    cart:{
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: "carts"   
     }
 })
 

@@ -26,7 +26,7 @@ app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 app.use(express.static(__dirname + "/public"))
 app.use(cookieParser("SecretCookie"))
-app.use(session({store: new MongoStore({mongoUrl: URI}),secret: "secretPassword", cookie: {maxAge: 120000}}))
+app.use(session({store: new MongoStore({mongoUrl: URI}),secret: "secretPassword", cookie: {maxAge: 1200000}}))
 //Ahora le decimos le asignamos el puerto 8080 a nuestro servidor
 const httpServer = app.listen(8080, () => console.log("Server running in port:8080"))
 

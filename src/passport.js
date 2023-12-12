@@ -5,6 +5,7 @@ import { Strategy as GithubStrategy } from "passport-github2";
 import { Strategy as GoogleStrategy} from "passport-google-oauth20";
 import { ExtractJwt, Strategy as JWTStrategy} from "passport-jwt";
 import { compareData, hashData } from "./utils.js";
+import { cartsManager } from "./dao/manager-mongo/CartsManager.mongo.js";
 
 passport.serializeUser((user, done) => {
     done(null, user._id)
@@ -26,8 +27,10 @@ passport.use(
         async (request, email, password, done) => {
             try {
                 const passwordHashed = await hashData(password)
+                const cartUser = await cartsManager.addCart()
                 const newUser = await usersManager.createUser({
                     ...request.body,
+                    cart: cartUser._id,
                     password: passwordHashed
                 })
                 done(null, newUser)
@@ -39,7 +42,7 @@ passport.use(
 )
 
 //Login por medio de sessiones
-/* passport.use(
+passport.use(
     "login",
     new LocalStrategy(
         {passReqToCallback: true, usernameField: "email"},
@@ -63,10 +66,11 @@ passport.use(
             }
         }
     )
-) */
+)
 
 //Validaciones próximas con JWT
 const fromCookies = (request) => {
+    console.log("token jwt", request)
     return request.cookies.token
 }
 passport.use("jwt", new JWTStrategy(
@@ -94,11 +98,12 @@ passport.use("github", new GithubStrategy(
         clientID: "Iv1.1884fc5f29e407c5",
         clientSecret: "98f2d7a65af9a997b42cb06332ff57bf7670faac",
         callbackURL: "http://localhost:8080/api/mongo/users/github/callback",
-        scope: ['user:email']
+        scope: [ 'user:email' ]
     },
     async (accessToken, refreshToken, profile, done) => {
         try {
             const user = await usersManager.findByEmail(profile._json.email)
+            const userCart = await cartsManager.addCart()
             if(user){
                 if(user.auth === "GITHUB"){
                     return done(null, user)
@@ -106,12 +111,21 @@ passport.use("github", new GithubStrategy(
                     return done(null, false)
                 }
             }
-            const infoUser = {
+            /* const infoUser = {
                 name: profile._json.name.split(" ")[0] || profile.displayname || profile.username,
                 lastName: profile._json.name.split(" ")[1] || profile.displayname || profile.username,
                 email: profile._json.email || profile.emails[0].value || profile.email[0].value || `${profile.username}.null@gmail.com`,
                 password: " ",
-                auth: "GITHUB"
+                auth: "GITHUB",
+                cart: userCart._id
+            } */
+            const infoUser = {
+                firstName: profile._json.name.split(" ")[0] || profile.username,
+                lastName: profile._json.name.split(" ")[1] || profile.username,
+                email: profile.emails[0].value || profile._json.email || `${profile.username}.null@gmail.com`,
+                password: " ",
+                auth: "GITHUB",
+                cart: userCart._id
             }
             const userCreated = await usersManager.createUser(infoUser)
             done(null, userCreated)
