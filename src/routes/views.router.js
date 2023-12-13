@@ -1,6 +1,7 @@
 import { Router } from "express";
-import { productsManager } from "../dao/manager-mongo/ProductManager.mongo.js";
-import { cartsManager } from "../dao/manager-mongo/CartsManager.mongo.js";
+import { productsManager } from "../dao/products.dao.js";
+import * as cartsController from "../controllers/carts.controller.js";
+import * as producstServices from "../services/products.services.js"
 //import jwt from "jsonwebtoken";
 
 const router = Router()
@@ -23,7 +24,7 @@ const router = Router()
 }) */
 
 router.get("/", async (request, response) => {
-    const result = await productsManager.getProducts(request.query)
+    const result = await producstServices.getProducts(request.query)
     if(!request.session.passport){
         return response.redirect("/login")
     }
@@ -54,13 +55,13 @@ router.get("/current", async (request, response) => {
 }) */
 
 router.get("/products/realtimeproducts", async (request, response) => {
-    const products = await productsManager.getProducts()
+    const products = await producstServices.getProducts()
     response.render("realTimeProducts", {products})
 })
 
 router.get("/cart/:cid", async (request, response) => {
     const {cid} = request.params
-    const cartProducts = await cartsManager.getCardById(cid)
+    const cartProducts = await cartsController.getCardById(cid)
     response.render("cart", {cartProducts})
 })
 
