@@ -1,3 +1,4 @@
 # Archivo de dependencias #
 ###########################
 node_modules
+.env
