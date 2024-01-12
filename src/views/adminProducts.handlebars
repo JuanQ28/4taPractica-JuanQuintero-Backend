@@ -1,0 +1,120 @@
+<header>
+    <nav class="navbar bg-body-tertiary navbar-expand-md">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="http://localhost:8080/admin">ArmyBody</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title" id="offcanvasNavbarLabel">ArmyBody</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                    <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                        {{#if user}}
+                            <li class="nav-item">
+                                {{user.email}}
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="http://localhost:8080/api/users/signout">Cerrar</a>
+                            </li>
+                        {{else}}
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="/login">Ingresa</a>
+                            </li>
+                        {{/if}}
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="http://localhost:8080/admin/products">Products</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<main>
+    <div class="container">
+        <h1>Crea un nuevo producto:</h1>
+        <form class="row g-3" action="http://localhost:8080/api/products" method="post">
+            <div class="col-md-6">
+                <label for="title" class="form-label">Título: </label>
+                <input type="text" class="form-control" id="title" name="title" required>
+            </div>
+            <div class="col-md-6">
+                <label for="description" class="form-label">Descripción: </label>
+                <input type="text" class="form-control" id="description" name="description" required>
+            </div>
+            <div class="col-md-6">
+                <label for="price" class="form-label">Precio: </label>
+                <input type="number" class="form-control" id="price" name="price" required>
+            </div>
+            <div class="col-md-6">
+                <label for="stock" class="form-label">Stock: </label>
+                <input type="number" class="form-control" id="stock" name="stock" required>
+            </div>
+            <div class="col-md-4">
+                <label for="category" class="form-label">Categoría</label>
+                <select id="category" name="category" class="form-select">
+                    <option value="proteina">Proteína</option>
+                    <option value="creatina">Creatina</option>
+                    <option value="preenetreno">PreEntreno</option>
+                    <option value="aminoacidos">Aminoácidos</option>
+                    <option value="multivitaminicos">Multivitáminicos</option>
+                </select>
+            </div>
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary">Crear producto</button>
+            </div>
+        </form>
+    </div>
+    <div class="container">
+        <div id="listContainer">
+            {{#each result.payload}}
+            <div class="card" style="width: 18rem;" id={{_id}}>
+                <img src={{thumbnail}} class="card-img-top" alt={{title}}>
+                <div class="card-body">
+                    <h5 class="card-title">{{title}}</h5>
+                    <p class="card-text">{{description}}</p>
+                    <p class="card-text">{{category}}</p>
+                    <p class="card-text">${{price}}</p>
+                    <p class="card-text">stock: {{stock}}</p>
+                    <form action="http://localhost:8080/api/products/deleteProduct/{{_id}}" method="post">
+                        <button type="submit" class="btn btn-outline-success">      
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                                <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0"/>
+                            </svg>
+                        </button>
+                    </form>
+                    <a href="http://localhost:8080/admin/products/{{_id}}">
+                        <button class="btn btn-outline-success">      
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
+                            </svg>
+                        </button>
+                    </a>
+                </div>
+            </div>
+            {{/each}}
+        </div>
+    </div>
+    <div class="container">
+            <p>
+                {{#if result.prevPage}}
+                    <a href={{result.prevLink}}>
+                        Ant
+                    </a>
+                {{/if}}
+                <span> {{result.page}}</span>
+                <span> de </span>
+                <span>{{result.totalPages}} </span>
+                {{#if result.nextPage}}
+                    <a href={{result.nextLink}}>
+                        Sig
+                    </a>
+                {{/if}}
+            </p>
+    </div>
+</main>

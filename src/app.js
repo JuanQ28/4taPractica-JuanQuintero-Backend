@@ -27,12 +27,14 @@ app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 app.use(express.static(__dirname + "/public"))
 app.use(cookieParser("SecretCookie"))
-app.use(session({store: new MongoStore({mongoUrl: URI}),secret: "secretPassword", cookie: {maxAge: 1200000}}))
+//Sessions:
+app.use(session({store: new MongoStore({mongoUrl: URI}),secret: "secretPassword", cookie: {maxAge: 120000}}))
 //Ahora le decimos le asignamos el puerto 8080 a nuestro servidor
 const httpServer = app.listen(config.port, () => console.log(`Server running in port:${config.port}`))
 
 //passport
 app.use(passport.initialize())
+//Sessions:
 app.use(passport.session())
 
 //Handlebars
@@ -44,10 +46,10 @@ app.set("view engine", "handlebars")
 
 app.use('/api/fs/products', productsRouterFile)
 app.use('/api/fs/carts', cartsRouterFile)
-app.use('/', viewsRouter)
 
 //Estas rutas de a continuación son las que nos servirán para mongo
 
+app.use('/', viewsRouter)
 app.use("/api/products", productsRouter)
 app.use("/api/carts", cartsRouter)
 app.use("/api/users", usersRouter)

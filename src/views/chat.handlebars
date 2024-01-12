@@ -1,5 +1,73 @@
+<header>
+    <nav class="navbar bg-body-tertiary navbar-expand-md">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">ArmyBody</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title" id="offcanvasNavbarLabel">ArmyBody</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                    <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                        {{#if user}}
+                            <li class="nav-item" id="userEmail">
+                                {{user.email}}
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="/api/users/signout">Cerrar</a>
+                            </li>
+                        {{else}}
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="/login">Ingresa</a>
+                            </li>
+                        {{/if}}
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="http://localhost8080/chat">Products</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="/">Products</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Categorías
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a class="dropdown-item" href="/?category=proteina">Proteína</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="/?category=creatina">Creatina</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="/?category=preentreno">Preentreno</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="/?category=aminoacidos">Aminoácidos</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="/?category=multivitaminicos">Multivitamínicos</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="http://localhost:8080/cart/{{user.cart}}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-minecart" viewBox="0 0 16 16">
+                                    <path d="M4 15a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm0 1a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm8-1a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm0 1a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM.115 3.18A.5.5 0 0 1 .5 3h15a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 14 12H2a.5.5 0 0 1-.491-.408l-1.5-8a.5.5 0 0 1 .106-.411zm.987.82 1.313 7h11.17l1.313-7H1.102z"/>
+                                </svg>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+
 <h1>CHATCODE</h1>
-<h2 id="name"></h2>
+{{!-- <h2 id="name"></h2> --}}
 
 <form id="formChat">
     <input type="text" id="formMessage">

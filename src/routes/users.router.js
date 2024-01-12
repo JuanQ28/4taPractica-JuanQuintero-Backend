@@ -1,7 +1,6 @@
 import { Router } from "express";
 import passport from "passport";
-import { restore, signout } from "../controllers/users.controller.js";
-//import jwt from "jsonwebtoken";
+import * as usersController from "../controllers/users.controller.js";
 
 const router = Router()
 
@@ -9,15 +8,11 @@ router.post("/signup", passport.authenticate("signup", {
     successRedirect:"/login",
     failureRedirect: "/signup",
 }))
+router.post("/login", usersController.login)
+router.post("/restore", usersController.restore)
+router.get("/signout", usersController.signout)
 
-router.post("/login", passport.authenticate("login", {
-    successRedirect:"/",
-    failureRedirect: "/login",
-}))
-router.post("/restore", restore)
-router.get("/signout", signout)
-
-//Obtención del usuario actual a través de sesiones
+//Obtención del usuario actual a través de JWT
 router.get("/current", async (request, response) => {
     try {
         const currentUser = await request.user
@@ -54,6 +49,11 @@ router.get("/google/callback", passport.authenticate("google", {
 
 export default router
 
+
+/* router.post("/login", passport.authenticate("login", {
+    successRedirect:"/",
+    failureRedirect: "/login",
+})) */
 /* router.get("/signout", async (request, response) => {
     try {
         response.clearCookie("token").redirect("/login")

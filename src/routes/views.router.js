@@ -1,17 +1,28 @@
 import { Router } from "express";
 import * as viewsController from "../controllers/views.controller.js";
-//import jwt from "jsonwebtoken";
+import { productsManager } from "../dao/products.dao.js";
+import { JWTIsExpired } from "../middlewares/JWTExpired.middleware.js";
+import jwt from "jsonwebtoken";
+import { authMiddleware } from "../middlewares/auth.middleware.js";
+import { productsServices } from "../services/products.services.js"
 
 const router = Router()
-
-router.get("/", viewsController.getProductsHome)
-router.get("/current", viewsController.current)
-router.get("/products/realtimeproducts", viewsController.getProductsRealTime)
-router.get("/cart/:cid", viewsController.getCardById)
-router.get("/chat", viewsController.chat)
+router.get("/", JWTIsExpired, authMiddleware(["CLIENT"]), viewsController.getProductsHome)
+router.get("/cart/:cid", JWTIsExpired, authMiddleware(["CLIENT"]), viewsController.getCardById)
+router.get("/chat", JWTIsExpired, authMiddleware(["CLIENT"]), viewsController.chat)
 router.get("/login", viewsController.login)
 router.get("/signup", viewsController.signup)
 router.get("/restore", viewsController.restore)
+router.get("/current", viewsController.current)
+router.get("/products/realtimeproducts", viewsController.getProductsRealTime)
+
+//Vistas de admin//
+
+router.get("/admin", JWTIsExpired, authMiddleware(["ADMIN"]), viewsController.adminHome)
+router.get("/admin/products", JWTIsExpired, authMiddleware(["ADMIN"]), viewsController.adminProducts)
+router.get("/admin/products/:pid", JWTIsExpired, authMiddleware(["ADMIN"]), viewsController.adminProductUpdate)
+///////////////////
+router.get("/productDetail/:id", JWTIsExpired, viewsController.productDetail)
 
 export default router
 

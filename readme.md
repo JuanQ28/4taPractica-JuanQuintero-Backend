@@ -34,8 +34,8 @@ Ahora se adjuntará las rutas que nos permiten el funcionamiento de nuestro logi
 
 [Ruta para la autorización local gracias a Passport](http://localhost:8080/api/mongo/users/login). (http://localhost:8080/api/mongo/users/login)
 
-[Ruta que nos permite ingresar a github y solicitar datos del usuario en cuestión](http://localhost:8080/api/mongo/users/auth/github). (http://localhost:8080/api/mongo/users/auth/github)
+[Ruta que nos permite ingresar a github y solicitar datos del usuario en cuestión](http://localhost:8080/api/users/auth/github). (http://localhost:8080/api/users/auth/github)
 
-[Ruta de retorno luego de la obtención de datos de usuario desde github](http://localhost:8080/api/mongo/users/callback). (http://localhost:8080/api/mongo/users/callback)
+[Ruta de retorno luego de la obtención de datos de usuario desde github](http://localhost:8080/api/users/callback). (http://localhost:8080/api/users/callback)
 
 ## Coderhouse - Backend - 47315

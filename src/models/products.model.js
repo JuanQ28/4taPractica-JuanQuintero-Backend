@@ -11,7 +11,7 @@ const productsSchema = new mongoose.Schema({
         default: "Default description"
     },
     code:{
-        type: Number,
+        type: String,
         required: true,
         unique: true
     },
@@ -29,11 +29,12 @@ const productsSchema = new mongoose.Schema({
     },
     category:{
         type: String,
+        enum: ["proteina", "creatina", "preenetreno", "aminoacidos", "multivitaminicos"],
         required: true
     },
     thumbnail:{
         type: String,
-        default: "./assets/imageNotFound.png"
+        default: "/assets/imageNotFound.png"
     }
 })
 

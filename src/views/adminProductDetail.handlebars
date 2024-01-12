@@ -1,0 +1,106 @@
+<header>
+    <nav class="navbar bg-body-tertiary navbar-expand-md">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="http://localhost:8080/admin">ArmyBody</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title" id="offcanvasNavbarLabel">ArmyBody</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                    <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                        {{#if user}}
+                            <li class="nav-item">
+                                {{user.email}}
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="http://localhost:8080/api/users/signout">Cerrar</a>
+                            </li>
+                        {{else}}
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="/login">Ingresa</a>
+                            </li>
+                        {{/if}}
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="http://localhost:8080/admin/products">Products</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<main>
+    <div class="container text-center">
+        Modificando:
+        <div class="row">
+            <div class="col-6">
+                Valores actuales
+            </div>
+            <div class="col-6">
+                Nuevos valores
+            </div>
+            <div class="col-6">
+                <form class="row g-3">
+                    <div class="col-md-6">
+                        <label for="disabledTextInput" class="form-label">Título: </label>
+                        <input type="text" class="form-control" id="disabledTextInput" placeholder="{{product.title}}" disabled required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="description" class="form-label">Descripción: </label>
+                        <input type="text" class="form-control" id="description" placeholder="{{product.description}}" disabled required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="price" class="form-label">Precio: </label>
+                        <input type="number" class="form-control" id="price" placeholder="{{product.price}}" required disabled>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="stock" class="form-label">Stock: </label>
+                        <input type="number" class="form-control" id="stock" placeholder="{{product.stock}}" required disabled>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="category" class="form-label">Category: </label>
+                        <input type="text" class="form-control" id="category" placeholder="{{product.category}}" required disabled>
+                    </div>
+                </form>
+            </div>
+            <div class="col-6">
+                <form class="row g-3" action="http://localhost:8080/api/products/updateProduct/{{product.productId}}" method="post">
+                    <div class="col-md-6">
+                        <label for="inputEmail4" class="form-label">Título: </label>
+                        <input type="text" class="form-control" id="title" name="title">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="inputEmail4" class="form-label">Descripción: </label>
+                        <input type="text" class="form-control" id="description" name="description">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="inputEmail4" class="form-label">Precio: </label>
+                        <input type="number" class="form-control" id="price" name="price">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="inputCity" class="form-label">Stock: </label>
+                        <input type="number" class="form-control" id="stock" name="stock">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="inputState" class="form-label">Categoría</label>
+                        <select id="category" name="category" class="form-select">
+                            <option value="proteina">Proteína</option>
+                            <option value="creatina">Creatina</option>
+                            <option value="preenetreno">PreEntreno</option>
+                            <option value="aminoacidos">Aminoácidos</option>
+                            <option value="multivitaminicos">Multivitáminicos</option>
+                        </select>
+                    </div>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary">Modificar producto</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>

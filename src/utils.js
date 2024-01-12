@@ -16,6 +16,12 @@ export const compareData = async (data, hashedData) => {
 }
 
 export const generateToken = (user) => {
-    const token = jwt.sign(user, SecretKey, {expiresIn: 400})
+    const token = jwt.sign(user, SecretKey, {expiresIn: 1000})
     return token
+}
+
+export const removeEmpty = (obj) => {
+    return Object.entries(obj)
+        .filter(([_, v]) => v != "")
+        .reduce((acc, [k, v]) => ({ ...acc, [k]: v }), {});
 }

@@ -1,4 +1,4 @@
-import * as cartsServices from "../services/carts.services.js"
+import {cartsServices} from "../services/carts.services.js"
 
 const getCarts = async (request, response) => {
     try {
@@ -28,8 +28,10 @@ const addCart = async (request, response) => {
 const addCartProduct = async (request, response) => {
     const {cid, pid} = request.params
     try {
-        const product = await cartsServices.addCartProduct(cid, pid)
-        response.status(200).json({message: `Product added with id:${cid}`, product})
+        //const product = await cartsServices.addCartProduct(cid, pid)
+        await cartsServices.addCartProduct(cid, pid)
+        //response.status(200).json({message: `Product added in id:${cid}`, product})
+        response.redirect(`/productDetail/${pid}`)
     } catch (error) {
         response.status(500).json({message: error.message})
     }
@@ -48,8 +50,10 @@ const deleteCartProducts = async (request, response) => {
 const deleteCartProduct = async (request, response) => {
     const {cid, pid} = request.params
     try {
-        const carts = await cartsServices.deleteCartProduct(cid, pid)
-        response.status(200).json({message: `Product:${pid}, removed in cart:${cid}`, carts})
+        //const carts = await cartsServices.deleteCartProduct(cid, pid)
+        //response.status(200).json({message: `Product:${pid}, removed in cart:${cid}`, carts})
+        await cartsServices.deleteCartProduct(cid, pid)
+        response.redirect(`http://localhost:8080/cart/${cid}`)
     } catch (error) {
         response.status(500).json({message: error.message})
     }

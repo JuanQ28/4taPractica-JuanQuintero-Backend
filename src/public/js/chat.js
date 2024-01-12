@@ -1,11 +1,11 @@
 const socketClient = io()
-const nameWelcome = document.querySelector("#name")
+//const nameWelcome = document.querySelector("#name")
 const chatDiv = document.querySelector("#chat")
 const form = document.querySelector("#formChat")
-const formInput = document.querySelector("#formMessage")
-let email, message 
+const formInput = document.querySelector("#formMessage") 
+const email = document.querySelector("#userEmail").textContent
 
-Swal.fire({
+/* Swal.fire({
     title: 'Bienvenido a ChatCode',
     input: 'email',
     inputLabel: 'Ingresa tu correo electrónico:',
@@ -20,7 +20,9 @@ Swal.fire({
         text: `Ingreso correcto con correo:: ${email}`,
         confirmButtonText: 'Continuar'
     })
-})
+}) */
+
+socketClient.emit("newUser", email)
 
 socketClient.on("userConnected", (email) =>{
     Toastify({

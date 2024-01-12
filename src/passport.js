@@ -6,7 +6,7 @@ import { Strategy as GoogleStrategy} from "passport-google-oauth20";
 import { ExtractJwt, Strategy as JWTStrategy} from "passport-jwt";
 import { compareData } from "./utils.js";
 import { cartsManager } from "./dao/carts.dao.js";
-import { createUser, findByEmail } from "./services/users.services.js";
+import {userServices} from "./services/users.services.js";
 
 passport.serializeUser((user, done) => {
     done(null, user._id)
@@ -27,7 +27,11 @@ passport.use(
         {passReqToCallback: true, usernameField: "email"},
         async (request, email, password, done) => {
             try {
-                const newUser = await createUser(request.body)
+                let role = "CLIENT"
+                if(email === "adminCoder@coder.com" && password === "adminCod3r123"){
+                    role = "ADMIN"
+                }
+                const newUser = await userServices.createUser({...request.body, role})
                 done(null, newUser)
             } catch (error) {
                 done(error)
@@ -43,7 +47,7 @@ passport.use(
         {passReqToCallback: true, usernameField: "email"},
         async (request, email, password, done) => {
             try {
-                const user = await findByEmail(email)
+                const user = await userServices.findByEmail(email)
                 if(!user){
                     return done(null, false)
                 }
@@ -130,25 +134,19 @@ passport.use(new GoogleStrategy(
 
 //Validaciones próximas con JWT
 const fromCookies = (request) => {
-    console.log("token jwt", request)
     return request.cookies.token
 }
 passport.use("jwt", new JWTStrategy(
     {
         jwtFromRequest: ExtractJwt.fromExtractors([fromCookies]),
         secretOrKey: "Proyecto47315",
-        //passReqToCallback: true
     },
     async (jwt_payload, done) => {
-        /* try {
-            if(jwt_payload){
-                request.currentUser = jwt_payload
-            }
-            console.log(jwt_payload)
-            done(null, jwt_payload)
+        try {
+            console.log("payload" ,jwt_payload)
+            return done(null, jwt_payload)
         } catch (error) {
-            done(error)
-        } */
-        done(null, jwt_payload)
+            return done(error)
+        }
     }
 ))
