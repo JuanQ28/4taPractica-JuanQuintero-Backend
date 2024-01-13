@@ -18,7 +18,8 @@ import config from "./config/config.js";
 import "./config/db.connection.js"
 import cookieParser from "cookie-parser";
 import session from "express-session";
-const URI = `mongodb+srv://elquinteje:${process.env.URI_PASSWORD}@cluster0.fy8hs8n.mongodb.net/ecommerce?retryWrites=true&w=majority`
+import { errorsMiddleware } from "./middlewares/errors.middleware.js";
+const URI = `mongodb+srv://elquinteje:${config.mongo_uri}@cluster0.fy8hs8n.mongodb.net/ecommerce?retryWrites=true&w=majority`
 
 //Creamos nuestro servidor desde express
 const app = express()
@@ -32,7 +33,7 @@ app.use(session({store: new MongoStore({mongoUrl: URI}),secret: "secretPassword"
 //Ahora le decimos le asignamos el puerto 8080 a nuestro servidor
 const httpServer = app.listen(config.port, () => console.log(`Server running in port:${config.port}`))
 
-//passport
+//passport:
 app.use(passport.initialize())
 //Sessions:
 app.use(passport.session())
@@ -53,6 +54,9 @@ app.use('/', viewsRouter)
 app.use("/api/products", productsRouter)
 app.use("/api/carts", cartsRouter)
 app.use("/api/users", usersRouter)
+
+//Manejo de errores:
+app.use(errorsMiddleware)
 
 //Ahora configuramos nuestro sockect
 const socketServer = new Server(httpServer)

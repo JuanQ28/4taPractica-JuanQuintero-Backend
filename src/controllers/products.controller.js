@@ -23,7 +23,7 @@ const addProducts = async (request, response) => {
 const getProductById = async (request, response) => {
     const {pid} = request.params
     try {
-        const products = await producstController.getProductById(pid)
+        const products = await productsServices.getProductById(pid)
         response.status(200).json({message: "Products", products})
     } catch (error) {
         response.status(500).json({message: error.message})

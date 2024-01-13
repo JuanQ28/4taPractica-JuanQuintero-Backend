@@ -1,6 +1,8 @@
 import { cartsServices } from "../services/carts.services.js";
 import { productsServices } from "../services/products.services.js"
 import jwt from "jsonwebtoken";
+import config from "../config/config.js";
+import { generateProduct } from "../faker.js";
 
 /* const getProductsHome = async (request, response) => {
     const result = await productsServices.getProducts(request.query)
@@ -20,7 +22,7 @@ const getProductsHome = async (request, response) => {
         return response.redirect("/login")
     }
     if(typeof token === "string"){
-        token = jwt.verify(request.cookies.token, "Proyecto47315")
+        token = jwt.verify(request.cookies.token, config.key_jwt)
     }
     const {firstName, email, cart, role} = token
     const result = await productsServices.getProducts(request.query, role)
@@ -31,7 +33,7 @@ const current = async (request, response) => {
     if(!request.cookies.token){
         return response.status(200).json({message: "Current user not available"})
     }
-    const current = jwt.verify(request.cookies.token, "Proyecto47315")
+    const current = jwt.verify(request.cookies.token, config.key_jwt)
     //console.log("Usuario current:" , current)
     return response.status(200).json({message: "Current user available", user: current})
 }
@@ -48,7 +50,7 @@ const getCardById = async (request, response) => {
         return response.redirect("/login")
     }
     if(typeof token === "string"){
-        token = jwt.verify(request.cookies.token, "Proyecto47315")
+        token = jwt.verify(request.cookies.token, config.key_jwt)
     }
     const {cart} = token
     const cartProductsNotCart = await cartsServices.getCardById(cid)
@@ -68,7 +70,7 @@ const chat = async (request, response) => {
         return response.redirect("/login")
     }
     if(typeof token === "string"){
-        token = jwt.verify(request.cookies.token, "Proyecto47315")
+        token = jwt.verify(request.cookies.token, config.key_jwt)
     }
     const {firstName, email, cart} = token
     response.render("chat", {user: {firstName, email, cart}})
@@ -80,11 +82,11 @@ const productDetail = async (request, response) => {
     }
     let token = request.cookies.token
     if(typeof token === "string"){
-        token = jwt.verify(request.cookies.token, "Proyecto47315")
+        token = jwt.verify(request.cookies.token, config.key_jwt)
     }
     const {cart: userCart, email: userEmail} = token
     const {id} = request.params
-    const productResult = await productsManager.getProductById(id)
+    const productResult = await productsServices.getProductById(id)
     const {_id, title, category, price, stock, thumbnail, status, code, description} = productResult
     response.render("productDetail", {product: {
         _id, 
@@ -107,7 +109,7 @@ const adminHome = async (request, response) => {
         return response.redirect("/login")
     }
     if(typeof token === "string"){
-        token = jwt.verify(request.cookies.token, "Proyecto47315")
+        token = jwt.verify(request.cookies.token, config.key_jwt)
     }
     const {email} = token
     response.render("admin", {user: {email}})
@@ -119,7 +121,7 @@ const adminProducts = async(request, response) => {
         return response.redirect("/login")
     }
     if(typeof token === "string"){
-        token = jwt.verify(request.cookies.token, "Proyecto47315")
+        token = jwt.verify(request.cookies.token, config.key_jwt)
     }
     const {email, role} = token
     const result = await productsServices.getProducts(request.query, role)
@@ -134,7 +136,7 @@ const adminProductUpdate = async(request, response) => {
         return response.redirect("/login")
     }
     if(typeof token === "string"){
-        token = jwt.verify(request.cookies.token, "Proyecto47315")
+        token = jwt.verify(request.cookies.token, config.key_jwt)
     }
     const {email} = token
     const {_id: product_ID} = productResult
@@ -171,6 +173,15 @@ const restore = async (request, response) => {
     response.render("restore")
 }
 
+const mockingProducts = async (request, response) => {
+    const products = []
+    for(let i = 0; i < 100; i++){
+        const product = generateProduct()
+        products.push(product)
+    }
+    return response.status(500).json({message: "Mocking generated", products})
+}
+
 export {
     getProductsHome,
     current,
@@ -183,5 +194,6 @@ export {
     productDetail,
     adminHome, 
     adminProducts,
-    adminProductUpdate
+    adminProductUpdate,
+    mockingProducts
 }

@@ -1,6 +1,7 @@
 import { Router } from "express";
 import passport from "passport";
 import * as usersController from "../controllers/users.controller.js";
+import config from "../config/config.js";
 
 const router = Router()
 
@@ -64,7 +65,7 @@ export default router
 //Obtención de token a través de cookies
 /* router.get("/cookies", passport.authenticate("jwt", {session: false}), async (request, response) => {
     try {
-        const currentUser = jwt.verify(request.cookies.token, "Proyecto47315")
+        const currentUser = jwt.verify(request.cookies.token, config.key_jwt)
         console.log(currentUser)
         if(currentUser){
             return response.status(200).json({message: "Current user available", user: currentUser})

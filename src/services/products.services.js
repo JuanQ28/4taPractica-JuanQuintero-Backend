@@ -1,4 +1,6 @@
 import { productsManager } from "../dao/products.dao.js"
+import CustomError from "../errors/error.generator.js"
+import { errors } from "../errors/errors.enum.js"
 
 class productsRepository{
     constructor(dao){
@@ -67,6 +69,10 @@ class productsRepository{
     }
     getProductById = async (id) => {
         const result = await productsManager.getProductById(id)
+        console.log(result)
+        if(!result){
+            return CustomError.generateError(errors.PRODUCT_NOT_FOUND.message, errors.PRODUCT_NOT_FOUND.code, errors.PRODUCT_NOT_FOUND.name)
+        }
         return result
     }
     updateProduct = async (id, update) => {

@@ -1,4 +1,6 @@
 import {cartsServices} from "../services/carts.services.js"
+import CustomError from "../errors/error.generator.js";
+import { errors } from "../errors/errors.enum.js";
 
 const getCarts = async (request, response) => {
     try {
@@ -11,8 +13,11 @@ const getCarts = async (request, response) => {
 const getCardById = async (request, response) => {
     const {cid} = request.params
     try {
-        const products = await cartsServices.getCardById(cid)
-        response.status(200).json({message: "Cart Found", products})
+        const cart = await cartsServices.getCardById(cid)
+        if(!result){
+            CustomError.generateError(errors.CART_NOT_FOUND.message, errors.CART_NOT_FOUND.code, errors.CART_NOT_FOUND.name)
+        }
+        response.status(200).json({message: "Cart Found", cart})
     } catch (error) {
         response.status(500).json({message: error.message})
     }

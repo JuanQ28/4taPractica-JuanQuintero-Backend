@@ -3,6 +3,7 @@ import * as cartsController from "../controllers/carts.controller.js";
 import { cartsManager } from "../dao/carts.dao.js";
 import { v4 as uuidv4 } from 'uuid'
 import { ticketsModel } from "../models/tickets.model.js";
+import config from "../config/config.js";
 
 const router = Router()
 
@@ -21,7 +22,7 @@ router.post("/:cid/purchase", async(request, response) => {
     let token = request.cookies.token
     console.log(token)
     if(typeof token === "string"){
-        token = jwt.verify(request.cookies.token, "Proyecto47315")
+        token = jwt.verify(request.cookies.token, config.key_jwt)
     }
     const {userId} = token
     try {

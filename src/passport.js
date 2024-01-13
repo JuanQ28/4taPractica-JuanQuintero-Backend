@@ -7,6 +7,7 @@ import { ExtractJwt, Strategy as JWTStrategy} from "passport-jwt";
 import { compareData } from "./utils.js";
 import { cartsManager } from "./dao/carts.dao.js";
 import {userServices} from "./services/users.services.js";
+import config from "./config/config.js";
 
 passport.serializeUser((user, done) => {
     done(null, user._id)
@@ -139,7 +140,7 @@ const fromCookies = (request) => {
 passport.use("jwt", new JWTStrategy(
     {
         jwtFromRequest: ExtractJwt.fromExtractors([fromCookies]),
-        secretOrKey: "Proyecto47315",
+        secretOrKey: config.key_jwt,
     },
     async (jwt_payload, done) => {
         try {

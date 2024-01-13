@@ -1,6 +1,7 @@
 import { userServices } from "../services/users.services.js"
 import { compareData, generateToken } from "../utils.js";
-import { usersManager } from "../dao/users.dao.js";
+import CustomError from "../errors/error.generator.js";
+import { errors } from "../errors/errors.enum.js";
 
 
 export const restore = async (request, response) => {
@@ -30,13 +31,13 @@ export const signout = async (request, response) => {
 export const login = async (request, response) => {
     const {email: emailUser, password} = request.body
     try {
-        const user = await usersManager.findByEmail(emailUser)
+        const user = await userServices.findByEmail(emailUser)
         if(!user){
             return response.redirect("/login")
         }
         const isPasswordValid = await compareData(password, user.password)
         if(!isPasswordValid){
-            return response.status(401).json({message:"Contraseña incorrecta"})
+            return CustomError.generateError(errors.INVALID_CREDENTIALS.message, errors.INVALID_CREDENTIALS.code, errors.INVALID_CREDENTIALS.name)
         }
         const {firstName, lastName, email, role, cart, _id} = user
         const userId = _id.toString()
