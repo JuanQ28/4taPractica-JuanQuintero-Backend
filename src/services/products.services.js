@@ -6,7 +6,7 @@ class productsRepository{
     constructor(dao){
         this.dao = dao
     }
-    getProducts = async (query, role) => {
+    getProducts = async (query, role = "CLIENT") => {
         const {limit = 10, page = 1, sort, ...filter} = query
         const filterObj = {limit, page, lean: true,sort: sort && {price: (sort === "asc")
                 ? 1

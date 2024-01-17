@@ -30,10 +30,15 @@ const getProductsHome = async (request, response) => {
 }
 
 const current = async (request, response) => {
-    if(!request.cookies.token){
-        return response.status(200).json({message: "Current user not available"})
+    let token = request.cookies.token
+    if(!token){
+        return response.redirect("/login")
     }
-    const current = jwt.verify(request.cookies.token, config.key_jwt)
+    if(typeof token === "string"){
+        token = jwt.verify(request.cookies.token, config.key_jwt)
+    }
+    console.log(token)
+    const current = jwt.verify(token, config.key_jwt)
     //console.log("Usuario current:" , current)
     return response.status(200).json({message: "Current user available", user: current})
 }
