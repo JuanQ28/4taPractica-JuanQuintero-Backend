@@ -1,6 +1,4 @@
 import { cartsManager } from "../dao/carts.dao.js";
-import CustomError from "../errors/error.generator.js";
-import { errors } from "../errors/errors.enum.js";
 
 class cartsRepository{
     constructor(dao){

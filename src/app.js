@@ -3,7 +3,7 @@ import productsRouterFile from "./file/routes-file/products.file.router.js";
 import cartsRouterFile from "./file/routes-file/carts.file.router.js";
 import viewsRouter from "./routes/views.router.js";
 import { engine } from "express-handlebars";
-import { __dirname } from "./utils.js";
+import { __dirname } from "./tools.js";
 import { Server } from "socket.io";
 import productsRouter from "./routes/products.router.js"
 import cartsRouter from "./routes/carts.router.js"
@@ -13,12 +13,14 @@ import MongoStore from "connect-mongo";
 import "./passport.js"
 import passport from "passport";
 import config from "./config/config.js";
+import { Arg } from "./config/commander.js";
 
 //Agregamos nuestro archivo de configuraciones para el acceso a nuestra base de datos MongoDB
 import "./config/db.connection.js"
 import cookieParser from "cookie-parser";
 import session from "express-session";
 import { errorsMiddleware } from "./middlewares/errors.middleware.js";
+import { logger } from "./utils/logger.js";
 const URI = `mongodb+srv://elquinteje:${config.mongo_uri}@cluster0.fy8hs8n.mongodb.net/ecommerce?retryWrites=true&w=majority`
 
 //Creamos nuestro servidor desde express
@@ -31,7 +33,7 @@ app.use(cookieParser("SecretCookie"))
 //Sessions:
 app.use(session({store: new MongoStore({mongoUrl: URI}),secret: "secretPassword", cookie: {maxAge: 120000}}))
 //Ahora le decimos le asignamos el puerto 8080 a nuestro servidor
-const httpServer = app.listen(config.port, () => console.log(`Server running in port:${config.port}`))
+const httpServer = app.listen(Arg.port, () => logger.http(`Server running in port:${Arg.port}`))
 
 //passport:
 app.use(passport.initialize())
@@ -82,4 +84,3 @@ socketServer.on("connection", (socket) => {
         socketServer.emit("chat", allMessages)
     })
 })
-

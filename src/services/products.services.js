@@ -69,7 +69,6 @@ class productsRepository{
     }
     getProductById = async (id) => {
         const result = await productsManager.getProductById(id)
-        console.log(result)
         if(!result){
             return CustomError.generateError(errors.PRODUCT_NOT_FOUND.message, errors.PRODUCT_NOT_FOUND.code, errors.PRODUCT_NOT_FOUND.name)
         }

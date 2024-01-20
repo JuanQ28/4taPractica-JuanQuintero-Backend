@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import config from "../config/config.js";
+import { logger } from "../utils/logger.js";
 
 export const authMiddleware = (roles) => {
     return (request, response, next) => {
@@ -10,8 +11,10 @@ export const authMiddleware = (roles) => {
         const {role} = token
         if(!roles.includes(role)){
             if(role === "CLIENT"){
+                logger.warning("Client not authorized")
                 return response.redirect("/")
             }else if(role === "ADMIN"){
+                logger.warning("Admin not authorized")
                 return response.redirect("/admin")
             }
         }

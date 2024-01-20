@@ -4,6 +4,7 @@ import { cartsManager } from "../dao/carts.dao.js";
 import { v4 as uuidv4 } from 'uuid'
 import { ticketsModel } from "../models/tickets.model.js";
 import config from "../config/config.js";
+import { logger } from "../utils/logger.js";
 
 const router = Router()
 
@@ -54,7 +55,7 @@ router.post("/:cid/purchase", async(request, response) => {
         }
         return {unavailableProducts}
     } catch (error) {
-        console.log(error.message)
+        logger.error(error.message)
     }
 })
 

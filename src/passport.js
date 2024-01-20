@@ -4,10 +4,11 @@ import { Strategy as LocalStrategy } from "passport-local";
 import { Strategy as GithubStrategy } from "passport-github2";
 import { Strategy as GoogleStrategy} from "passport-google-oauth20";
 import { ExtractJwt, Strategy as JWTStrategy} from "passport-jwt";
-import { compareData } from "./utils.js";
+import { compareData } from "./tools.js";
 import { cartsManager } from "./dao/carts.dao.js";
 import {userServices} from "./services/users.services.js";
 import config from "./config/config.js";
+import { logger } from "./utils/logger.js";
 
 passport.serializeUser((user, done) => {
     done(null, user._id)
@@ -33,6 +34,7 @@ passport.use(
                     role = "ADMIN"
                 }
                 const newUser = await userServices.createUser({...request.body, role})
+                logger.info("User signup for passport by route")
                 done(null, newUser)
             } catch (error) {
                 done(error)

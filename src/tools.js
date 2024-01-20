@@ -6,6 +6,8 @@ import config from './config/config.js';
 
 export const __dirname = dirname(fileURLToPath(import.meta.url))
 
+//export const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
+
 export const hashData = async (data) => {
     return bcrypt.hash(data, 10)
 }

@@ -1,5 +1,5 @@
 import { usersManager } from "../dao/users.dao.js";
-import { hashData } from "../utils.js";
+import { hashData } from "../tools.js";
 import {cartsServices} from "../services/carts.services.js"
 import CustomError from "../errors/error.generator.js";
 import { errors } from "../errors/errors.enum.js";

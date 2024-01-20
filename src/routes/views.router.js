@@ -23,6 +23,7 @@ router.get("/admin/products/:pid", JWTIsExpired, authMiddleware(["ADMIN"]), view
 ///////////////////
 
 router.get("/mockingproducts", viewsController.mockingProducts)
+router.get("/loggertest", viewsController.loggerTest)
 
 export default router
 
