@@ -17,7 +17,7 @@ const getCardById = async (request, response) => {
     try {
         logger.info("Cart by id received by route")
         const cart = await cartsServices.getCardById(cid)
-        if(!result){
+        if(!cart){
             CustomError.generateError(errors.CART_NOT_FOUND.message, errors.CART_NOT_FOUND.code, errors.CART_NOT_FOUND.name)
         }
         response.status(200).json({message: "Cart Found", cart})

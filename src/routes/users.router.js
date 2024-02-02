@@ -1,7 +1,6 @@
 import { Router } from "express";
 import passport from "passport";
 import * as usersController from "../controllers/users.controller.js";
-import config from "../config/config.js";
 
 const router = Router()
 
@@ -13,20 +12,6 @@ router.post("/login", usersController.login)
 router.post("/restore", usersController.restore)
 router.get("/signout", usersController.signout)
 
-//Obtención del usuario actual a través de JWT
-router.get("/current", async (request, response) => {
-    try {
-        const currentUser = await request.user
-        console.log("current:" ,currentUser)
-        if(!request.session.passport){
-            return response.status(404).json({message: "Current user not available"})
-        }else{
-            return response.status(200).json({message: "Current user available", user: currentUser.name})
-        }
-    } catch (error) {
-        response.status(500).json({message: error.message})
-    }
-})
 //Github Strategy
 router.get("/auth/github", passport.authenticate('github', 
 { scope: [ 'user:email' ] })
@@ -50,6 +35,20 @@ router.get("/google/callback", passport.authenticate("google", {
 
 export default router
 
+//Obtención del usuario actual a través de JWT
+/* router.get("/current", async (request, response) => {
+    try {
+        const currentUser = await request.user
+        console.log("current:" ,currentUser)
+        if(!request.session.passport){
+            return response.status(404).json({message: "Current user not available"})
+        }else{
+            return response.status(200).json({message: "Current user available", user: currentUser.name})
+        }
+    } catch (error) {
+        response.status(500).json({message: error.message})
+    }
+}) */
 
 /* router.post("/login", passport.authenticate("login", {
     successRedirect:"/",

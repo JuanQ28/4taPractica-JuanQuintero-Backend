@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import config from "../config/config.js";
 import { generateProduct } from "../utils/faker.js";
 import { logger } from "../utils/logger.js";
+import UserRequest from "../dtos/user.ruquest.dto.js";
 
 /* const getProductsHome = async (request, response) => {
     const result = await productsServices.getProducts(request.query)
@@ -34,17 +35,21 @@ const getProductsHome = async (request, response) => {
 
 const current = async (request, response) => {
     let token = request.cookies.token
-    if(!token){
+    const authHeader = request.get("Authorization")
+    const tokenHeader = authHeader.split(" ")[1]
+    let tokenResponse
+    if(!token && !authHeader){
         logger.debug("Token doesn't exist")
-        return response.redirect("/login")
+        return response.status(404).json({message: "Token doesn't exist"})
     }
     if(typeof token === "string"){
-        token = jwt.verify(request.cookies.token, config.key_jwt)
+        tokenResponse = jwt.verify(request.cookies.token, config.key_jwt)
     }
-    logger.debug(token)
-    const current = jwt.verify(token, config.key_jwt)
-    //console.log("Usuario current:" , current)
-    return response.status(200).json({message: "Current user available", user: current})
+    if(authHeader){
+        tokenResponse = jwt.verify(tokenHeader, config.key_jwt)
+    }
+    const tokenResponseDTO = new UserRequest(tokenResponse)
+    return response.status(200).json({message: "Current user available", user: tokenResponseDTO})
 }
 
 const getProductsRealTime = async (request, response) => {

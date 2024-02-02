@@ -47,6 +47,8 @@ export const login = async (request, response) => {
         const {firstName, lastName, email, role, cart, _id} = user
         const userId = _id.toString()
         const token = generateToken({firstName, lastName, email, role, cart, userId})
+        //request.session.user = token
+        logger.info(`Login token: ${token}`)
         response.cookie("token", token, {httpOnly: true}).redirect("/")
     } catch (error) {
         response.status(500).json({message: error.message})

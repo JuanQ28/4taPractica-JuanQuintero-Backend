@@ -14,7 +14,8 @@ const ticketsSchema = new mongoose.Schema({
         required: true
     },
     purchaser: {
-        type: mongoose.SchemaTypes.ObjectId,
+        /* type: mongoose.SchemaTypes.ObjectId, */
+        type: String,
         ref: "users"
     }
 })

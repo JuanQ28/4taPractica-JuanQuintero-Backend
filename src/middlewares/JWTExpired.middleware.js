@@ -13,6 +13,7 @@ export const JWTIsExpired = async (request, response, next) => {
                     return response.clearCookie("token").redirect("/login")
                 }else {
                     logger.debug("Token renovated")
+                    //request.session.user = token
                     response.cookie("token", userToken, {httpOnly: true})
                     next()
                 }                
@@ -23,6 +24,7 @@ export const JWTIsExpired = async (request, response, next) => {
                     return response.clearCookie("token").redirect("/login")
                 }else {
                     logger.debug("Token renovated")
+                    //equest.session.user = token
                     response.cookie("token", token, {httpOnly: true})
                     next()
                 }

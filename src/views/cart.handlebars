@@ -83,7 +83,6 @@
                                 </svg>
                             </button>
                         </form>
-                        
                     </div>
                 </div>
             </div>
@@ -92,4 +91,10 @@
     {{!-- <form action="http://localhost:8080/api/carts/{{product.userCart}}/purchase" method="post">
         <button type="submit" class="btn btn-outline-success">Agregar al carrito</button>
     </form> --}}
+    {{!-- <form action="http://localhost:8080/api/carts/{{user.cart}}/purchase" method="post">
+        <button type="submit" class="btn btn-primary btn-lg">Finalizar compra</button>
+    </form> --}}
+    <a href="http://localhost:8080/api/carts/{{user.cart}}/purchase">
+        <button type="submit" class="btn btn-primary btn-lg">Finalizar compra</button>
+    </a>
 </div>
