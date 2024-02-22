@@ -17,10 +17,13 @@ import { Arg } from "./config/commander.js";
 
 //Agregamos nuestro archivo de configuraciones para el acceso a nuestra base de datos MongoDB
 import "./config/db.connection.js"
+
 import cookieParser from "cookie-parser";
 import session from "express-session";
 import { errorsMiddleware } from "./middlewares/errors.middleware.js";
 import { logger } from "./utils/logger.js";
+import swaggerUi from "swagger-ui-express"
+import { swaggerSetup } from "./utils/swagger.js";
 const URI = `mongodb+srv://elquinteje:${config.mongo_uri}@cluster0.fy8hs8n.mongodb.net/ecommerce?retryWrites=true&w=majority`
 
 //Creamos nuestro servidor desde express
@@ -56,6 +59,9 @@ app.use('/', viewsRouter)
 app.use("/api/products", productsRouter)
 app.use("/api/carts", cartsRouter)
 app.use("/api/users", usersRouter)
+
+//Docs
+app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSetup))
 
 //Manejo de errores:
 app.use(errorsMiddleware)

@@ -1,0 +1,166 @@
+paths:
+  /api/users:
+    get:
+      summary: Get all products
+      tags:
+        - Products
+      responses:
+        "200":
+          description: All products
+        "500":
+          description: Server error
+    post:
+      summary: Add product
+      tags:
+        - Products
+      requestBody: 
+        content:
+          application/json:
+            schemas:
+              $ref: "#components/requestBodies/addProduct"
+            example:
+              title: Proteina Spartan
+              description: "10lb"
+              price: 53220
+              status: true
+              stock: 1
+              category: proteina
+              thumbnail: www.imagelink.com/img.jpg
+  /api/users/{id}:
+    get:
+      summary: Get product by id
+      tags:
+        - Products
+      parameters:
+        - name: id
+          in: path
+          description: Product identifier
+      responses:
+        "200":
+          description: One product found
+          content:
+            aplication/json:
+              schemas:
+                $ref: "#components/schemas/Product"
+              example:
+                id: 65763584bbaz15e7460a4f2
+                title: Proteina Master Pro
+                description: "2lb"
+                code: eaf6cawa9-21a7-313b-a1d2-wwfd5e43c727
+                owner: alguien@mail.com
+                price: 24100
+                status: true
+                stock: 12
+                category: proteina
+                thumbnail: www.imagelink.com/img.jpg
+        "500":
+          description: Server error
+  /updateProduct/{id}:
+    post:
+      summary: Update product by id
+      tags: 
+        - Products
+      parameters:
+        - name: id
+          in: path
+          description: Product identifier
+      requestBody: 
+        content:
+          application/json:
+            schemas:
+              $ref: "#components/requestBodies/updateProduct"
+            example:
+              title: Creatina Master Pro
+              description: "1lb"
+              price: 241220
+              status: true
+              stock: 21
+              category: proteina
+              thumbnail: www.imagelink.com/img.jpg
+  /deleteProduct/{id}:
+    post:
+      summary: Delete product 
+      tags:
+        - Products
+      parameters:
+        - name: id
+          in: path
+          description: Product identifier
+      responses:
+        "200":
+          description: Product eliminated
+        "401":
+          description: You are not authorized to remove this product
+        "500":
+          description: Server error  
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        code:
+          type: string
+        owner:
+          type: string
+        price:
+          type: number
+        status:
+          type: boolean
+        stock:
+          type: number
+        category:
+          type: string
+        thumbnail:
+          type: string
+      example:
+        id: 65763584bbaz15e7460a4f2
+        title: Proteina Master Pro
+        description: "2lb"
+        code: eaf6cawa9-21a7-313b-a1d2-wwfd5e43c727
+        owner: alguien@mail.com
+        price: 24100
+        status: true
+        stock: 12
+        category: proteina
+        thumbnail: www.imagelink.com/img.jpg
+  requestBodies:
+    updateProduct:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+        status:
+          type: boolean
+        stock:
+          type: number
+        category:
+          type: string
+        thumbnail:
+          type: string
+    addProduct:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+        status:
+          type: boolean
+        stock:
+          type: number
+        category:
+          type: string
+        thumbnail:
+          type: string

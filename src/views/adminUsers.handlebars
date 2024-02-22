@@ -1,7 +1,7 @@
 <header>
     <nav class="navbar bg-body-tertiary navbar-expand-md">
         <div class="container-fluid">
-            <a class="navbar-brand" href="/">ArmyBody</a>
+            <a class="navbar-brand" href="http://localhost:8080/admin">ArmyBody</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -25,7 +25,7 @@
                             </li>
                         {{/if}}
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="admin/products">Create Products</a>
+                            <a class="nav-link active" aria-current="page" href="http://localhost:8080/admin/products">Create Products</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link active" aria-current="page" href="http://localhost:8080/admin/usersRoles">Roles</a>
@@ -36,8 +36,21 @@
         </div>
     </nav>
 </header>
+
 <main>
     <div class="container">
-        <h1>Bienvenido administrador</h1>
+        {{#each resultNotAdmin}}
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">{{firstName}} {{lastName}}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">{{email}}</h6>
+                    <p class="card-text">Role: {{role}}</p>
+                    {{!-- <a href="#" class="card-link">Delete User</a> --}}
+                    <form action="http://localhost:8080/api/users/changeRole/{{_id}}" method="post">
+                        <button type="submit" class="btn btn-primary">Change role</button>
+                    </form>
+                </div>
+            </div>          
+        {{/each}}
     </div>
 </main>

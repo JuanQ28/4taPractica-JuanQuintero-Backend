@@ -11,10 +11,10 @@ export const authMiddleware = (roles) => {
         const {role} = token
         if(!roles.includes(role)){
             if(role === "CLIENT"){
-                logger.warning("Client not authorized")
+                logger.warning(`${role} or premium not authorized`)
                 return response.redirect("/")
             }else if(role === "ADMIN"){
-                logger.warning("Admin not authorized")
+                logger.warning(`${role} or premium not authorized`)
                 return response.redirect("/admin")
             }
         }

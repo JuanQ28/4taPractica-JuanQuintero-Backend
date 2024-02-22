@@ -12,21 +12,66 @@
                 </div>
                 <div class="offcanvas-body">
                     <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-                        {{#if user}}
+                        {{#if user.isAdmin}}
                             <li class="nav-item">
                                 {{user.email}}
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link active" aria-current="page" href="http://localhost:8080/api/users/signout">Cerrar</a>
                             </li>
-                        {{else}}
                             <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="/login">Ingresa</a>
+                                <a class="nav-link active" aria-current="page" href="http://localhost:8080/admin/products">Create Products</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="http://localhost:8080/admin/usersRoles">Roles</a>
                             </li>
                         {{/if}}
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="http://localhost:8080/admin/products">Products</a>
-                        </li>
+                        {{#if user.isPremium}}
+                            <li class="nav-item">
+                                {{user.email}}
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="/api/users/signout">Cerrar</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="/chat">Chat</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="/">Products</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Categorías
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a class="dropdown-item" href="/?category=proteina">Proteína</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="/?category=creatina">Creatina</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="/?category=preentreno">Preentreno</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="/?category=aminoacidos">Aminoácidos</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="/?category=multivitaminicos">Multivitamínicos</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="http://localhost:8080/admin/products">Create Products</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/cart/{{user.cart}}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-minecart" viewBox="0 0 16 16">
+                                        <path d="M4 15a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm0 1a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm8-1a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm0 1a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM.115 3.18A.5.5 0 0 1 .5 3h15a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 14 12H2a.5.5 0 0 1-.491-.408l-1.5-8a.5.5 0 0 1 .106-.411zm.987.82 1.313 7h11.17l1.313-7H1.102z"/>
+                                    </svg>
+                                </a>
+                            </li>
+                        {{/if}}
                     </ul>
                 </div>
             </div>
@@ -72,31 +117,33 @@
     <div class="container">
         <div id="listContainer">
             {{#each result.payload}}
-            <div class="card" style="width: 18rem;" id={{_id}}>
-                <img src={{thumbnail}} class="card-img-top" alt={{title}}>
-                <div class="card-body">
-                    <h5 class="card-title">{{title}}</h5>
-                    <p class="card-text">{{description}}</p>
-                    <p class="card-text">{{category}}</p>
-                    <p class="card-text">${{price}}</p>
-                    <p class="card-text">stock: {{stock}}</p>
-                    <form action="http://localhost:8080/api/products/deleteProduct/{{_id}}" method="post">
-                        <button type="submit" class="btn btn-outline-success">      
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
-                                <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0"/>
-                            </svg>
-                        </button>
-                    </form>
-                    <a href="http://localhost:8080/admin/products/{{_id}}">
-                        <button class="btn btn-outline-success">      
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
-                                <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
-                                <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
-                            </svg>
-                        </button>
-                    </a>
+                <div class="card" style="width: 18rem;" id={{_id}}>
+                    <img src={{thumbnail}} class="card-img-top" alt={{title}}>
+                    <div class="card-body">
+                        <h5 class="card-title">{{title}}</h5>
+                        <p class="card-text">{{description}}</p>
+                        <p class="card-text">{{category}}</p>
+                        <p class="card-text">${{price}}</p>
+                        <p class="card-text">stock: {{stock}}</p>
+                        <form action="http://localhost:8080/api/products/deleteProduct/{{_id}}" method="post">
+                            <button type="submit" class="btn btn-outline-success">      
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                                    <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0"/>
+                                </svg>
+                            </button>
+                        </form>
+                        {{#if user.isAdmin}}
+                            <a href="http://localhost:8080/admin/products/{{_id}}">
+                                <button class="btn btn-outline-success">      
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                        <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
+                                    </svg>
+                                </button>
+                            </a>
+                        {{/if}}
+                    </div>
                 </div>
-            </div>
             {{/each}}
         </div>
     </div>

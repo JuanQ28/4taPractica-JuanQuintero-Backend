@@ -34,6 +34,10 @@ class UsersRepository{
         const result = usersManager.findByEmail(email)
         return result
     }
+    getUsers = () => {
+        const result = usersManager.getUsers()
+        return result
+    }
 }
 
 export const userServices = new UsersRepository(usersManager)

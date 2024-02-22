@@ -2,6 +2,7 @@ import {cartsServices} from "../services/carts.services.js"
 import CustomError from "../errors/error.generator.js";
 import { errors } from "../errors/errors.enum.js";
 import { logger } from "../utils/logger.js";
+import { productsServices } from "../services/products.services.js";
 
 const getCarts = async (request, response) => {
     try {
@@ -38,6 +39,19 @@ const addCartProduct = async (request, response) => {
     const {cid, pid} = request.params
     try {
         logger.info("Product added in a card by route")
+        let token = request.cookies.token
+        if(!token){
+            logger.debug("Token doesn't exist")
+            return response.redirect("/login")
+        }
+        if(typeof token === "string"){
+            token = jwt.verify(request.cookies.token, config.key_jwt)
+        }
+        const product = await productsServices.getProductById(pid)
+        const {email} = token
+        if(product.owner === email){
+            return response.status(401).json({message: "You are not authorized to add this product, because is your"})
+        }
         //const product = await cartsServices.addCartProduct(cid, pid)
         await cartsServices.addCartProduct(cid, pid)
         //response.status(200).json({message: `Product added in id:${cid}`, product})

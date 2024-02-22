@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import config from "../config/config.js";
 import { generateProduct } from "../utils/faker.js";
 import { logger } from "../utils/logger.js";
-import UserRequest from "../dtos/user.ruquest.dto.js";
+import UserRequest from "../dtos/user.request.dto.js";
 
 /* const getProductsHome = async (request, response) => {
     const result = await productsServices.getProducts(request.query)
@@ -28,9 +28,13 @@ const getProductsHome = async (request, response) => {
         token = jwt.verify(request.cookies.token, config.key_jwt)
     }
     const {firstName, email, cart, role} = token
+    const user = {firstName, email, cart, isPremium: false}
+    if(role === "PREMIUM"){
+        user.isPremium = true
+    }
     const result = await productsServices.getProducts(request.query, role)
     logger.http("Home view charged")
-    response.render("home", {result, user: {firstName, email, cart}})
+    response.render("home", {result, user})
 }
 
 const current = async (request, response) => {
@@ -68,13 +72,17 @@ const getCardById = async (request, response) => {
     if(typeof token === "string"){
         token = jwt.verify(request.cookies.token, config.key_jwt)
     }
-    const {cart} = token
+    const {cart, role} = token
+    const user = {cart, isPremium: false}
+    if(role === "PREMIUM"){
+        user.isPremium = true
+    }
     const cartProductsNotCart = await cartsServices.getCardById(cid)
     const cartProducts = cartProductsNotCart.products.map(product => {
         return {...product, cart}
     })
     logger.http("Cart view charged")
-    response.render("cart", {cartProducts, user: {cart}})
+    response.render("cart", {cartProducts, user})
 }
 
 /* const chat = async (request, response) => {
@@ -90,9 +98,13 @@ const chat = async (request, response) => {
     if(typeof token === "string"){
         token = jwt.verify(request.cookies.token, config.key_jwt)
     }
-    const {firstName, email, cart} = token
+    const {firstName, email, cart, role} = token
+    const user = {firstName, email, cart, isPremium: false}
+    if(role === "PREMIUM"){
+        user.isPremium = true
+    }
     logger.http("Chat view charged")
-    response.render("chat", {user: {firstName, email, cart}})
+    response.render("chat", {user})
 }
 
 const productDetail = async (request, response) => {
@@ -104,7 +116,12 @@ const productDetail = async (request, response) => {
     if(typeof token === "string"){
         token = jwt.verify(request.cookies.token, config.key_jwt)
     }
-    const {cart: userCart, email: userEmail} = token
+
+    const {firstName, email: userEmail, cart: userCart, role} = token
+    const user = {firstName, userEmail, userCart, isPremium: false}
+    if(role === "PREMIUM"){
+        user.isPremium = true
+    }
     const {id} = request.params
     const productResult = await productsServices.getProductById(id)
     const {_id, title, category, price, stock, thumbnail, status, code, description} = productResult
@@ -121,7 +138,7 @@ const productDetail = async (request, response) => {
         description,
         userCart,
         userEmail
-    }})
+    }, user})
 }
 
 const adminHome = async (request, response) => {
@@ -147,10 +164,17 @@ const adminProducts = async(request, response) => {
     if(typeof token === "string"){
         token = jwt.verify(request.cookies.token, config.key_jwt)
     }
-    const {email, role} = token
+    let {email, cart, role} = token
+    const user = {email, cart, isPremium: false, isAdmin: false}
+    if(role === "PREMIUM"){
+        user.isPremium = true
+        role = "ADMIN"
+    }else if(role === "ADMIN"){
+        user.isAdmin = true
+    }
     const result = await productsServices.getProducts(request.query, role)
     logger.http("Admin products view charged")
-    response.render("adminProducts", {result, user: {email}})
+    response.render("adminProducts", {result, user})
 }
 
 const adminProductUpdate = async(request, response) => {

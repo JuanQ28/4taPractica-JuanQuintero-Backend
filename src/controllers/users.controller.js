@@ -3,20 +3,27 @@ import { compareData, generateToken } from "../tools.js";
 import CustomError from "../errors/error.generator.js";
 import { errors } from "../errors/errors.enum.js";
 import { logger } from "../utils/logger.js";
+import {transporter} from "../utils/nodemailer.js"
 
 
 export const restore = async (request, response) => {
-    const {email, password} = request.body
+    const {email} = request.body
     try {
-        logger.info("Password restore by route")
+        logger.info("Password restore request")
         const user = await userServices.findByEmail(email)
         if(!user){
             return response.redirect("/login")
         }
-        const passwordHashed = await hashData(password)
-        user.password = passwordHashed
-        await user.save()
-        response.redirect("/login")
+        const mailOptions = {
+            from: "JuanAdmin",
+            to: email,
+            subject: "Recuperación de Contraseña",
+            html: 
+                `<h1>Ingresa al siguiente link:</h1>
+                http://localhost:8080/restore/${user._id}`
+        }
+        await transporter.sendMail(mailOptions)
+        response.cookie("restoreCookie", true, {httpOnly: true, maxAge: 3600000}).redirect("/login")
     } catch (error) {
         response.status(500).json({error})
     }

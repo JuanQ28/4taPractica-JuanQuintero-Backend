@@ -43,12 +43,25 @@ if(Arg.mode === "prod"){
             })
         ]
     })
-}else{
+}else if(Arg.mode === "dev"){
     logger = winston.createLogger({
         levels: customLevels.levels,
         transports: [
             new winston.transports.Console({
                 level: "debug",
+                format: winston.format.combine(
+                    winston.format.colorize({colors: customLevels.colors}),
+                    winston.format.simple()
+                )
+            })
+        ]
+    })
+}else{
+    logger = winston.createLogger({
+        levels: customLevels.levels,
+        transports: [
+            new winston.transports.Console({
+                level: "fatal",
                 format: winston.format.combine(
                     winston.format.colorize({colors: customLevels.colors}),
                     winston.format.simple()

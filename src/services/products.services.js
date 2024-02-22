@@ -37,7 +37,7 @@ class productsRepository{
                         ? `http://localhost:8080/admin/products?page=${result.nextPage}`
                         : `http://localhost:8080/admin/products?page=${result.nextPage}&&limit=${query.limit}`,
             }
-        }else if(role === "CLIENT"){
+        }else if(role === "CLIENT" || role === "PREMIUM"){
             info = {
                 status: (result.docs.length === 0)
                     ? "error"

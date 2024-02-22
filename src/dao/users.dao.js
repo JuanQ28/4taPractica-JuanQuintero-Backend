@@ -17,6 +17,11 @@ class UsersManager {
         logger.http("User by email received correctly")
         return result
     }
+    async getUsers(){
+        const result = await usersModel.find().lean()
+        logger.http("All users received correctly")
+        return result
+    }
 }
 
 export const usersManager = new UsersManager()

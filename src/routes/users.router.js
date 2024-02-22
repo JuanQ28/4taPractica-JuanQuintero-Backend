@@ -1,6 +1,9 @@
 import { Router } from "express";
 import passport from "passport";
 import * as usersController from "../controllers/users.controller.js";
+import { userServices } from "../services/users.services.js";
+import { compareData, hashData } from "../tools.js";
+import { logger } from "../utils/logger.js";
 
 const router = Router()
 
@@ -10,7 +13,66 @@ router.post("/signup", passport.authenticate("signup", {
 }))
 router.post("/login", usersController.login)
 router.post("/restore", usersController.restore)
+router.post("/restore/:id", async (request, response) => {
+    const {id} = request.params
+    const {password1, password2} = request.body
+    try {
+        const user = await userServices.findById(id)
+        const isPasswordValid1 = await compareData(password1, user.password)
+        const isPasswordValid2 = await compareData(password2, user.password)
+        if(!user){
+            return response.render("/login")
+        }
+        if(isPasswordValid1 || isPasswordValid2){
+            return response.status(401).json({message: "Cambia tu contraseña, coíncide con la anterior"})
+        }
+        if(password1 !== password2){
+            return response.status(401).json({message: "No coinciden las contraseñas"})
+        }
+        const hashPassword = await hashData(password1)
+        user.password = hashPassword
+        await user.save()
+        logger.info("An user change password correctly")
+        return response.clearCookie("responseAuth").render("login")
+    } catch (error) {
+        response.status(500).json({error})
+    }
+})
 router.get("/signout", usersController.signout)
+router.post("/changeRole/:id", async (request, response) => {
+    const {id} = request.params
+    try {
+        const user = await userServices.findById(id)
+        let token = request.cookies.token
+        if(!token){
+            logger.debug("Token doesn't exist")
+            return response.redirect("/login")
+        }
+        if(typeof token === "string"){
+            token = jwt.verify(request.cookies.token, config.key_jwt)
+        }
+        if(!user){
+            return response.render("/login")
+        }
+        if(user.role === "CLIENT"){
+            user.role = "PREMIUM"
+            await user.save()
+        }else if(user.role === "PREMIUM"){
+            user.role = "CLIENT"
+            await user.save()
+        }
+        const {email} = token
+        const result = await userServices.getUsers()
+        const resultNotAdmin = result.filter((user) => user.role !== "ADMIN")
+        response.render("adminUsers", {resultNotAdmin, user: {email}})
+        logger.info(`Role changed at the user: ${user.firstName} ${user.lastName}`)
+        logger.http("Admin users view charged")
+        return response.redirect("http://localhost:8080/admin/usersRoles")
+        //return response.render("adminUsers", {resultNotAdmin, user: {email}})
+    } catch (error) {
+        response.status(500).json({error})
+    }
+})
 
 //Github Strategy
 router.get("/auth/github", passport.authenticate('github', 

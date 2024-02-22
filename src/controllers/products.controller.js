@@ -15,8 +15,26 @@ const getProducts = async (request, response) => {
 
 const addProducts = async (request, response) => {
     try {
+        let token = request.cookies.token || undefined
+        let userRole = undefined
+        /* if(!token){
+            logger.debug("Token doesn't exist")
+            return response.redirect("/login")
+        } */
+        if(typeof token === "string"){
+            token = jwt.verify(request.cookies.token, config.key_jwt)
+        }
+        //const {email, role} = token
+        if(token){
+            const {email, role} = token
+            userRole = role
+        }
+        let product = {code: uuidv4(), ...request.body}
+        if(userRole === "PREMIUM"){
+            product = {...product, owner: email}
+        }
         logger.info("Product added by route")
-        const product = await productsServices.addProducts({code: uuidv4(), ...request.body})
+        await productsServices.addProducts(product)
         response.redirect("/admin/products")
     } catch (error) {
         response.status(500).json({message: error.message})
@@ -28,6 +46,9 @@ const getProductById = async (request, response) => {
     try {
         logger.info("Product received for id by route")
         const products = await productsServices.getProductById(pid)
+        if(!products){
+            response.status(404).json({message: "Product not found"})
+        }
         response.status(200).json({message: "Products", products})
     } catch (error) {
         response.status(500).json({message: error.message})
@@ -49,6 +70,24 @@ const updateProduct = async (request, response) => {
 const deleteProduct = async (request, response) => {
     const {pid} = request.params
     try {
+        let token = request.cookies.token || undefined
+        let emailUser = undefined
+        /* if(!token){
+            logger.debug("Token doesn't exist")
+            return response.redirect("/login")
+        } */
+        if(typeof token === "string"){
+            token = jwt.verify(request.cookies.token, config.key_jwt)
+        }
+        if(token){
+            const {email} = token
+            emailUser = email
+        }
+        const product = await productsServices.getProductById(pid)
+        //const {email} = token
+        if(product.owner !== emailUser && emailUser){
+            return response.status(401).json({message: "You are not authorized to remove this product"})
+        }
         logger.info("Product deleted by route")
         await productsServices.deleteProduct(pid)
         response.redirect("/admin/products")

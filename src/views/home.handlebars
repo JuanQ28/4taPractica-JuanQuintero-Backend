@@ -52,6 +52,11 @@
                                 </li>
                             </ul>
                         </li>
+                        {{#if user.isPremium}}
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="http://localhost:8080/admin/products">Create Products</a>
+                        </li>
+                        {{/if}}
                         <li class="nav-item">
                             <a class="nav-link" href="/cart/{{user.cart}}">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-minecart" viewBox="0 0 16 16">
