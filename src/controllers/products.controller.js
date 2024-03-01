@@ -15,8 +15,11 @@ const getProducts = async (request, response) => {
 
 const addProducts = async (request, response) => {
     try {
+        const files = request.files
         let token = request.cookies.token || undefined
         let userRole = undefined
+        let userEmail
+        let product = request.body
         /* if(!token){
             logger.debug("Token doesn't exist")
             return response.redirect("/login")
@@ -28,11 +31,27 @@ const addProducts = async (request, response) => {
         if(token){
             const {email, role} = token
             userRole = role
+            userEmail = email
         }
-        let product = {code: uuidv4(), ...request.body}
+        let filesNamePath = []
+        /* filesNamePath = files.forEach(file => {
+            filesNamePath.push({
+                name: file.originalname,
+                reference: file.path
+            })
+        }); */
+        for(let i = 0; i <= files.length-1; i++){
+            filesNamePath.push({
+                name: files[i].filename,
+                reference: `http://localhost:8080/multerDocs/${files[i].fieldname}/${files[i].filename}`,
+                path: files[i].path
+            })
+        }
+        product = {...product, thumbnail: filesNamePath, code: uuidv4()}
         if(userRole === "PREMIUM"){
-            product = {...product, owner: email}
+            product = {...product, owner: userEmail}
         }
+        console.log(product)
         logger.info("Product added by route")
         await productsServices.addProducts(product)
         response.redirect("/admin/products")

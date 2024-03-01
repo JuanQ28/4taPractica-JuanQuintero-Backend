@@ -5,6 +5,7 @@ import config from "../config/config.js";
 import { generateProduct } from "../utils/faker.js";
 import { logger } from "../utils/logger.js";
 import UserRequest from "../dtos/user.request.dto.js";
+import { userServices } from "../services/users.services.js"; 
 
 /* const getProductsHome = async (request, response) => {
     const result = await productsServices.getProducts(request.query)
@@ -27,12 +28,16 @@ const getProductsHome = async (request, response) => {
     if(typeof token === "string"){
         token = jwt.verify(request.cookies.token, config.key_jwt)
     }
-    const {firstName, email, cart, role} = token
-    const user = {firstName, email, cart, isPremium: false}
+    let {firstName, email, cart, role, userId} = token
+    const user = {firstName, email, cart, isPremium: false, userId}
     if(role === "PREMIUM"){
         user.isPremium = true
     }
-    const result = await productsServices.getProducts(request.query, role)
+    let result = await productsServices.getProducts(request.query, role)
+    for(let i = 0; i <= result.payload.length-1; i++){
+        const randomImage = Math.floor(Math.random() * ((result.payload[i].thumbnail.length)))
+        result.payload[i].thumbnail = result.payload[i].thumbnail[randomImage].reference
+    }
     logger.http("Home view charged")
     response.render("home", {result, user})
 }
@@ -83,6 +88,40 @@ const getCardById = async (request, response) => {
     })
     logger.http("Cart view charged")
     response.render("cart", {cartProducts, user})
+}
+
+const getProfile = async (request, response) => {
+    let token = request.cookies.token
+    try {
+        let status = {
+            personID: false,
+            adress: false,
+            accountStatus: false
+        }
+        if(!token){
+            logger.debug("Token doesn't exist")
+            return response.redirect("/login")
+        }
+        if(typeof token === "string"){
+            token = jwt.verify(request.cookies.token, config.key_jwt)
+        }
+        const {firstName, email, cart, role, userId} = token
+        const userFound = await userServices.findById(userId)
+        if(userFound.status.length){
+            userFound.status.forEach(state => {
+                status[state] = true
+            })
+        }
+        console.log(status)
+        const user = {firstName, email, cart, isPremium: false}
+        if(role === "PREMIUM"){
+            user.isPremium = true
+        }
+        logger.http("Profile view charged")
+        response.render("profile", {user, status})
+    } catch (error) {
+        response.status(500).json({message: error.message})
+    }
 }
 
 /* const chat = async (request, response) => {
@@ -164,8 +203,8 @@ const adminProducts = async(request, response) => {
     if(typeof token === "string"){
         token = jwt.verify(request.cookies.token, config.key_jwt)
     }
-    let {email, cart, role} = token
-    const user = {email, cart, isPremium: false, isAdmin: false}
+    let {email, cart, role, _id} = token
+    const user = {email, cart, isPremium: false, isAdmin: false, _id}
     if(role === "PREMIUM"){
         user.isPremium = true
         role = "ADMIN"
@@ -203,6 +242,37 @@ const adminProductUpdate = async(request, response) => {
     }})
 }
 
+const adminRoles = async (request, response) => {
+    try {
+        let token = request.cookies.token
+        if(!token){
+            logger.debug("Token doesn't exist")
+            return response.redirect("/login")
+        }
+        if(typeof token === "string"){
+            token = jwt.verify(request.cookies.token, config.key_jwt)
+        }
+        const {email} = token
+        const result = await userServices.getUsers()
+        const resultNotAdmin = result.filter((user) => {
+            console.log(user.status)
+            return user.role !== "ADMIN" && user.status.includes("personID") && user.status.includes("adress") && user.status.includes("accountStatus")
+        })
+        const resultCompleted = resultNotAdmin.map(user => {
+            if(user.role === "CLIENT"){
+                return {...user, isClient: true} 
+            }else{
+                return {...user, isClient: false}
+            }
+        })
+        console.log(result)
+        logger.http("Admin users view charged")
+        response.render("adminUsers", {resultCompleted, user: {email}})
+    } catch (error) {
+        response.status(500).json({message: error.message})
+    }
+}
+
 const login = async (request, response) => {
     if(request.cookies.token){
         logger.debug("Token doesn't exist")
@@ -219,6 +289,25 @@ const signup = async (request, response) => {
     }
     logger.http("Signup view charged")
     response.render("signup")
+}
+
+const restorePassword = async (request, response) => {
+    const {id} = request.params
+    const responseAuth = request.cookies.restoreCookie
+    try {
+        const user = await userServices.findById(id)
+        if(!responseAuth){
+            return response.render("restorePasswordBad")
+        }
+        if(!user){
+            return response.render("login")
+        }
+        const userResult = await userServices.findById(id)
+        const {_id, firstName, lastName} = userResult
+        response.render("restorePasswordGood", {user: {_id, firstName, lastName}})
+    } catch (error) {
+        response.status(500).json({message: error.message})
+    }
 }
 
 const restore = async (request, response) => {
@@ -258,11 +347,14 @@ export {
     chat,
     login,
     signup,
-    restore,
+    restorePassword,
     productDetail,
     adminHome, 
     adminProducts,
     adminProductUpdate,
     mockingProducts,
-    loggerTest
+    loggerTest,
+    getProfile,
+    adminRoles,
+    restore
 }

@@ -22,6 +22,11 @@ class UsersManager {
         logger.http("All users received correctly")
         return result
     }
+    async updateUser(id, object){
+        const result = await usersModel.updateOne(id, object)
+        logger.http("User modified correctly")
+        return result
+    }
 }
 
 export const usersManager = new UsersManager()

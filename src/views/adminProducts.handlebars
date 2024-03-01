@@ -14,7 +14,9 @@
                     <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
                         {{#if user.isAdmin}}
                             <li class="nav-item">
-                                {{user.email}}
+                                <a href="http://localhost:8080/profile">
+                                    {{user.email}}
+                                </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link active" aria-current="page" href="http://localhost:8080/api/users/signout">Cerrar</a>
@@ -82,7 +84,7 @@
 <main>
     <div class="container">
         <h1>Crea un nuevo producto:</h1>
-        <form class="row g-3" action="http://localhost:8080/api/products" method="post">
+        <form class="row g-3" action="http://localhost:8080/api/products" method="post" enctype="multipart/form-data">
             <div class="col-md-6">
                 <label for="title" class="form-label">Título: </label>
                 <input type="text" class="form-control" id="title" name="title" required>
@@ -108,6 +110,10 @@
                     <option value="aminoacidos">Aminoácidos</option>
                     <option value="multivitaminicos">Multivitáminicos</option>
                 </select>
+            </div>
+            <div class="col-md-6">
+                <label for="product" class="form-label">Imagen: </label>
+                <input type="file" class="form-control" id="product" name="product" required multiple="multiple">
             </div>
             <div class="col-12">
                 <button type="submit" class="btn btn-primary">Crear producto</button>

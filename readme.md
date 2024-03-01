@@ -1,22 +1,22 @@
 # Práctica de integración sobre tu ecommerce
 
-Para esta entrega se empezó con la implementación de un manejo de los errores más comunes en los proyectos. Por otro lado, la obtención de productos "mockeados" a partir de una nueva ruta.
+Para esta entrega se implementó un sitio con mayor interactividad en los perfiles y roles de usuario, de forma que un administrador podrá conceder permisos a aquellos usuarios que realicen un envío de documentos personales.
 
 ## Ejecución del proyecto
 
 Para iniciar el proyecto es necesario ejecutar este comando para levantar el servidor:
 
+Para la realización del proyecto en producción:
 ```bash
 npm start
 ```
 
-## Ruta para el usuario actual:
+Para la realización del proyecto en desarrollo:
+```bash
+npm run start:dev
+```
 
-Desde esta ruta se podrá ver el usuario actual, obteniendo el token JWT por medio de cookies.
-
-[Current User](http://localhost:8080/current). (http://localhost:8080/current)
-
-## Rutas para visualizar el front 
+## Rutas para visualizar el front del cliente
 
 Para ingresar a la home, y rutas principales, del proyecto se precisa de las siguientes ruta:
 
@@ -27,5 +27,9 @@ Para ingresar a la home, y rutas principales, del proyecto se precisa de las sig
 [SignUp](http://localhost:8080/signup). (http://localhost:8080/signup)
 
 [Chat](http://localhost:8080/chat). (http://localhost:8080/chat)
+
+[Restore password](http://localhost:8080/restore). (http://localhost:8080/restore)
+
+[Perfil del usuario](http://localhost:8080/profile). (http://localhost:8080/profile)
 
 ## Coderhouse - Backend - 47315

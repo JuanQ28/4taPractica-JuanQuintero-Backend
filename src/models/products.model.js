@@ -37,8 +37,17 @@ const productsSchema = new mongoose.Schema({
         required: true
     },
     thumbnail:{
-        type: String,
-        default: "/assets/imageNotFound.png"
+        type: [
+            {
+                name: String,
+                reference: String,
+                path: String
+            }
+        ],
+        default: [
+            "http://localhost:8080/public/assets/imageNotFound.png"
+        ],
+        _id: false
     }
 })
 

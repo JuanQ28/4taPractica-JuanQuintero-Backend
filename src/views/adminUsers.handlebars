@@ -39,7 +39,7 @@
 
 <main>
     <div class="container">
-        {{#each resultNotAdmin}}
+        {{#each resultCompleted}}
             <div class="card" style="width: 18rem;">
                 <div class="card-body">
                     <h5 class="card-title">{{firstName}} {{lastName}}</h5>
@@ -49,6 +49,12 @@
                     <form action="http://localhost:8080/api/users/changeRole/{{_id}}" method="post">
                         <button type="submit" class="btn btn-primary">Change role</button>
                     </form>
+                    {{#if isClient}}
+                        <form action="http://localhost:8080/api/users/cancelRole/{{_id}}" method="post">
+                            <button type="submit" class="btn btn-primary">Cancel
+                            </button>
+                        </form>
+                    {{/if}}
                 </div>
             </div>          
         {{/each}}

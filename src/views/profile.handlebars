@@ -74,40 +74,68 @@
 </header>
 <main>
     <div class="container">
-        {{#if user}}
-            <h1>Bienvenido {{user.firstName}}</h1>
-        {{else}}
-            <h1>Bienvenido</h1>
-        {{/if}}
-        <div id="listContainer"> 
-            {{#each result.payload}}
-                <div class="card" style="width: 18rem;" id={{_id}}>
-                    <img src={{thumbnail}} class="card-img-top" alt={{title}}>
-                    <div class="card-body">
-                        <h5 class="card-title">{{title}}</h5>
-                        <p class="card-text">${{price}}</p>
-                        <button type="button" class="btn btn-outline-success" onclick="window.location.href='/productDetail/{{_id}}';">Detalles</button>
-                    </div>
+        <h1>Ingresa estos archivos para ser validado:</h1>
+        <form class="row g-3" action="http://localhost:8080/api/users/documents" method="post" enctype="multipart/form-data">
+            {{#if status.personID}}
+                <div class="col-md-6">
+                    <label for="personID" class="form-label">Identificación: </label>
+                    <input type="file" class="form-control" id="personID" name="personID" disabled>
                 </div>
-            {{/each}}
-        </div>
-        <div class="container">
-            <p>
-                {{#if result.prevPage}}
-                    <a href={{result.prevLink}}>
-                        Ant
-                    </a>
+            {{else}}
+                <div class="col-md-6">
+                    <label for="personID" class="form-label">Identificación: </label>
+                    <input type="file" class="form-control" id="personID" name="personID">
+                </div>
+            {{/if}}
+            {{#if status.adress}}
+                <div class="col-md-6">
+                    <label for="adress" class="form-label">Comprobante de domicilio: </label>
+                    <input type="file" class="form-control" id="adress" name="adress" disabled> 
+                </div>
+            {{else}}
+                <div class="col-md-6">
+                    <label for="adress" class="form-label">Comprobante de domicilio: </label>
+                    <input type="file" class="form-control" id="adress" name="adress">
+                </div>
+            {{/if}}
+            {{#if status.accountStatus}}
+                <div class="col-md-6">
+                    <label for="accountStatus" class="form-label">Comprobante de estado de cuenta: </label>
+                    <input type="file" class="form-control" id="accountStatus" name="accountStatus" disabled>
+                </div>
+            {{else}}
+                <div class="col-md-6">
+                    <label for="accountStatus" class="form-label">Comprobante de estado de cuenta: </label>
+                    <input type="file" class="form-control" id="accountStatus" name="accountStatus">
+                </div>
+            {{/if}}
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary"
+                    {{#if status.accountStatus}}
+                        {{#if status.adress}}
+                            {{#if status.personID}}
+                                disabled    
+                            {{/if}}   
+                        {{/if}}
+                    {{/if}}
+                >Enviar documentos</button>
+            </div>
+        </form>
+        {{#if status.personID}}
+            {{#if status.adress}}
+                {{#if status.accountStatus}}
+                <h2>Estás en revisión del administrador, muchas gracias!</h2>
                 {{/if}}
-                <span> {{result.page}}</span>
-                <span> de </span>
-                <span>{{result.totalPages}} </span>
-                {{#if result.nextPage}}
-                    <a href={{result.nextLink}}>
-                        Sig
-                    </a>
-                {{/if}}
-            </p>
-        </div>
+            {{/if}}
+        {{/if}}
+        {{!-- <form class="row g-3" action="http://localhost:8080/api/products" method="post" enctype="multipart/form-data">
+            <div class="col-md-6">
+                <label for="product" class="form-label">Imagen: </label>
+                <input type="file" class="form-control" id="product" name="product" required multiple="multiple">
+            </div>
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary">Crear producto</button>
+            </div>
+        </form> --}}
     </div>
 </main>
-<script src="/js/home.js"></script>

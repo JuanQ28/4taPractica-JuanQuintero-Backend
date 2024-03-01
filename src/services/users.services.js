@@ -38,6 +38,10 @@ class UsersRepository{
         const result = usersManager.getUsers()
         return result
     }
+    updateUser = (id, object) => {
+        const result = usersManager.updateUser(id, object)
+        return result
+    }
 }
 
 export const userServices = new UsersRepository(usersManager)

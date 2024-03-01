@@ -14,6 +14,7 @@ import "./passport.js"
 import passport from "passport";
 import config from "./config/config.js";
 import { Arg } from "./config/commander.js";
+import { resolve } from "path";
 
 //Agregamos nuestro archivo de configuraciones para el acceso a nuestra base de datos MongoDB
 import "./config/db.connection.js"
@@ -31,8 +32,10 @@ const app = express()
 //Ahora le permitimos a nuestro servidor recibir información desde el body
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
-app.use(express.static(__dirname + "/public"))
+app.use("/public" ,express.static(resolve(__dirname + "/public")))
+app.use("/multerDocs" ,express.static(resolve(__dirname + "/multerDocs")))
 app.use(cookieParser("SecretCookie"))
+
 //Sessions:
 app.use(session({store: new MongoStore({mongoUrl: URI}),secret: "secretPassword", cookie: {maxAge: 120000}}))
 //Ahora le decimos le asignamos el puerto 8080 a nuestro servidor
