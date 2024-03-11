@@ -29,6 +29,7 @@ router.post("/documents", upload.fields([
         maxCount: 1
     }
 ]), usersController.documents)
+router.delete("/inactivity", usersController.inactivity)
 
 //Github Strategy
 router.get("/auth/github", passport.authenticate('github', 

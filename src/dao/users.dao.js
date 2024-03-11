@@ -27,6 +27,11 @@ class UsersManager {
         logger.http("User modified correctly")
         return result
     }
+    async deleteUser(id){
+        const result = await usersModel.deleteOne({_id: id})
+        logger.http("User deleted correctly")
+        return result
+    }
 }
 
 export const usersManager = new UsersManager()

@@ -1,6 +1,6 @@
-# Práctica de integración sobre tu ecommerce
+# Ecommerce con acceso de roles
 
-Para esta entrega se implementó un sitio con mayor interactividad en los perfiles y roles de usuario, de forma que un administrador podrá conceder permisos a aquellos usuarios que realicen un envío de documentos personales.
+Para este proyecto se implementó un ecommerce en donde pueden haber clientes, usuarios premium que pueden crear y eliminar sus propios productos, y un administrador encargado de tareas de mayor rango(asignación de roles y dominio total de productos).
 
 ## Ejecución del proyecto
 

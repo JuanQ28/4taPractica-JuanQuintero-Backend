@@ -42,6 +42,10 @@ class UsersRepository{
         const result = usersManager.updateUser(id, object)
         return result
     }
+    deleteUser = (id) => {
+        const result = usersManager.deleteUser(id)
+        return result
+    }
 }
 
 export const userServices = new UsersRepository(usersManager)

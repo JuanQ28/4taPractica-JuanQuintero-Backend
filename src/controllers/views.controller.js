@@ -163,7 +163,9 @@ const productDetail = async (request, response) => {
     }
     const {id} = request.params
     const productResult = await productsServices.getProductById(id)
-    const {_id, title, category, price, stock, thumbnail, status, code, description} = productResult
+    let {_id, title, category, price, stock, thumbnail, status, code, description} = productResult
+    const randomImage = Math.floor(Math.random() * ((thumbnail.length)))
+    thumbnail = thumbnail[randomImage].reference
     logger.http("Product detail view charged")
     response.render("productDetail", {product: {
         _id, 
@@ -212,6 +214,10 @@ const adminProducts = async(request, response) => {
         user.isAdmin = true
     }
     const result = await productsServices.getProducts(request.query, role)
+    for(let i = 0; i <= result.payload.length-1; i++){
+        const randomImage = Math.floor(Math.random() * ((result.payload[i].thumbnail.length)))
+        result.payload[i].thumbnail = result.payload[i].thumbnail[randomImage].reference
+    }
     logger.http("Admin products view charged")
     response.render("adminProducts", {result, user})
 }

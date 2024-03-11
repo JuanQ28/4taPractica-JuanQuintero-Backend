@@ -2,6 +2,8 @@ import { productsServices } from "../services/products.services.js"
 import { v4 as uuidv4 } from 'uuid'
 import { removeEmpty } from "../tools.js"
 import { logger } from "../utils/logger.js"
+import { userServices } from "../services/users.services.js"
+import { transporter } from "../utils/nodemailer.js"
 
 const getProducts = async (request, response) => {
     try {
@@ -91,6 +93,7 @@ const deleteProduct = async (request, response) => {
     try {
         let token = request.cookies.token || undefined
         let emailUser = undefined
+        let userRole = undefined
         /* if(!token){
             logger.debug("Token doesn't exist")
             return response.redirect("/login")
@@ -99,16 +102,29 @@ const deleteProduct = async (request, response) => {
             token = jwt.verify(request.cookies.token, config.key_jwt)
         }
         if(token){
-            const {email} = token
+            const {email, role} = token
             emailUser = email
+            userRole = role
         }
         const product = await productsServices.getProductById(pid)
         //const {email} = token
-        if(product.owner !== emailUser && emailUser){
+        if(userRole !== "ADMIN" && product.owner !== emailUser && emailUser){
             return response.status(401).json({message: "You are not authorized to remove this product"})
         }
         logger.info("Product deleted by route")
         await productsServices.deleteProduct(pid)
+        const productOwner = await userServices.findByEmail(product.owner)
+        if(productOwner.role === "PREMIUM"){
+            const mailOptions = {
+                from: "JuanAdmin",
+                to: product.owner,
+                subject: "Ha sido eliminado uno de tus productos",
+                html: 
+                    `<h1>Fue eliminado el producto:</h1>
+                    <p>${product.title }</p>`
+            }
+            await transporter.sendMail(mailOptions)
+        }
         response.redirect("/admin/products")
     } catch (error) {
         response.status(500).json({message: error.message})

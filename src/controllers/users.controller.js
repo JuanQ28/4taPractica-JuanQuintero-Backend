@@ -4,6 +4,7 @@ import CustomError from "../errors/error.generator.js";
 import { errors } from "../errors/errors.enum.js";
 import { logger } from "../utils/logger.js";
 import {transporter} from "../utils/nodemailer.js"
+import { usersManager } from "../dao/users.dao.js";
 
 
 export const restore = async (request, response) => {
@@ -41,7 +42,7 @@ export const signout = async (request, response) => {
         }
         const {userId} = token
         const user = await userServices.findById(userId)
-        user.lastConnection = new Date().toLocaleString()
+        user.lastConnection = new Date().toISOString()
         await user.save()
         logger.info("User signout by route")
         response.clearCookie("token").redirect("/login")
@@ -65,12 +66,42 @@ export const login = async (request, response) => {
         }
         const {firstName, lastName, email, role, cart, _id} = user
         const userId = _id.toString()
-        user.lastConnection = new Date().toLocaleString()
+        user.lastConnection = new Date().toISOString()
         await user.save()
         const token = generateToken({firstName, lastName, email, role, cart, userId})
         //request.session.user = token
         logger.info(`Login token: ${token}`)
         response.cookie("token", token, {httpOnly: true}).redirect("/")
+    } catch (error) {
+        response.status(500).json({message: error.message})
+    }
+}
+
+export const inactivity = async (request, response) => {
+    try {
+        let users = await userServices.getUsers()
+        let usersEliminated = []
+        if(!users.length){
+            return response.status(404).json({message: "Users not found"})
+        }
+        for(let i = 0; i <= users.length - 1; i++){
+            let userLastConnection = new Date(users[i].lastConnection)
+            let currentTime = new Date()
+            let disconnectedTime = currentTime.getTime() - userLastConnection.getTime()
+            let fiveMinutes = 300000
+            let twoDays = 172800000
+            if(disconnectedTime > twoDays){
+                if(users[i].role !== "ADMIN"){
+                    usersEliminated.push(users[i])
+                    await userServices.deleteUser(users[i]._id)
+                }
+            }
+        }
+        if(!usersEliminated.length){
+            return response.status(200).json({message: "No users deleted"})
+        }
+        logger.http("Users with inactivity are deleted")
+        response.status(200).json({message: "Users deleted", users: usersEliminated})
     } catch (error) {
         response.status(500).json({message: error.message})
     }
